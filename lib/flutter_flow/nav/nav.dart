@@ -130,8 +130,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: ChatWidget.routeName,
           path: ChatWidget.routePath,
-          builder: (context, params) =>
-              params.isEmpty ? NavBarPage(initialPage: 'chat') : ChatWidget(),
+          builder: (context, params) => ChatWidget(
+            gameref: params.getParam(
+              'gameref',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['game'],
+            ),
+          ),
         ),
         FFRoute(
           name: MyfeedbackWidget.routeName,

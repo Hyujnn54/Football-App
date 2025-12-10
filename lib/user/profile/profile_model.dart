@@ -1,3 +1,4 @@
+import '/components/drawer/drawer_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'profile_widget.dart' show ProfileWidget;
 import 'package:flutter/material.dart';
@@ -18,10 +19,16 @@ class ProfileModel extends FlutterFlowModel<ProfileWidget> {
   TextEditingController? textController3;
   late bool passwordVisibility;
   String? Function(BuildContext, String?)? textController3Validator;
+  // Model for drawer component.
+  late DrawerModel drawerModel1;
+  // Model for drawer component.
+  late DrawerModel drawerModel2;
 
   @override
   void initState(BuildContext context) {
     passwordVisibility = false;
+    drawerModel1 = createModel(context, () => DrawerModel());
+    drawerModel2 = createModel(context, () => DrawerModel());
   }
 
   @override
@@ -34,5 +41,8 @@ class ProfileModel extends FlutterFlowModel<ProfileWidget> {
 
     textFieldFocusNode3?.dispose();
     textController3?.dispose();
+
+    drawerModel1.dispose();
+    drawerModel2.dispose();
   }
 }

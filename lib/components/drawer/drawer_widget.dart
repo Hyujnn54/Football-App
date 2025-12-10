@@ -32,6 +32,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => DrawerModel());
+
+    _model.switchValue = false;
   }
 
   @override
@@ -295,6 +297,21 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           .bodyLarge
                                           .fontStyle,
                                     ),
+                          ),
+                          Switch.adaptive(
+                            value: _model.switchValue!,
+                            onChanged: (newValue) async {
+                              safeSetState(
+                                  () => _model.switchValue = newValue);
+                            },
+                            activeColor:
+                                FlutterFlowTheme.of(context).primaryText,
+                            activeTrackColor:
+                                FlutterFlowTheme.of(context).error,
+                            inactiveTrackColor:
+                                FlutterFlowTheme.of(context).alternate,
+                            inactiveThumbColor: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
                           ),
                         ].divide(SizedBox(width: 12.0)),
                       ),

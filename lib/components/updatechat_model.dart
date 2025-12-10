@@ -1,16 +1,9 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
-import 'chat_widget.dart' show ChatWidget;
+import 'updatechat_widget.dart' show UpdatechatWidget;
 import 'package:flutter/material.dart';
 
-class ChatModel extends FlutterFlowModel<ChatWidget> {
-  ///  Local state fields for this page.
-
-  DocumentReference? editingMessageRef;
-
-  String? editingMessageText;
-
-  ///  State fields for stateful widgets in this page.
+class UpdatechatModel extends FlutterFlowModel<UpdatechatWidget> {
+  ///  State fields for stateful widgets in this component.
 
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode;

@@ -480,7 +480,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             }
 
                             context.goNamedAuth(
-                                Shop1Widget.routeName, context.mounted);
+                                GameWidget.routeName, context.mounted);
                           },
                           text: 'Sign In',
                           options: FFButtonOptions(
@@ -578,7 +578,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                           }
 
                           context.goNamedAuth(
-                              Shop1Widget.routeName, context.mounted);
+                              GameWidget.routeName, context.mounted);
                         },
                         text: 'Continue with Google',
                         options: FFButtonOptions(

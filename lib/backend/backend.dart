@@ -7,12 +7,11 @@ import 'schema/util/firestore_util.dart';
 
 import 'schema/produit_record.dart';
 import 'schema/user_record.dart';
-import 'schema/chat_record.dart';
 import 'schema/game_record.dart';
-import 'schema/messages_record.dart';
 import 'schema/feedback_record.dart';
 import 'schema/team_record.dart';
 import 'schema/users_cart_record.dart';
+import 'schema/messages_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -23,12 +22,11 @@ export 'schema/util/schema_util.dart';
 
 export 'schema/produit_record.dart';
 export 'schema/user_record.dart';
-export 'schema/chat_record.dart';
 export 'schema/game_record.dart';
-export 'schema/messages_record.dart';
 export 'schema/feedback_record.dart';
 export 'schema/team_record.dart';
 export 'schema/users_cart_record.dart';
+export 'schema/messages_record.dart';
 
 /// Functions to query ProduitRecords (as a Stream and as a Future).
 Future<int> queryProduitRecordCount({
@@ -104,43 +102,6 @@ Future<List<UserRecord>> queryUserRecordOnce({
       singleRecord: singleRecord,
     );
 
-/// Functions to query ChatRecords (as a Stream and as a Future).
-Future<int> queryChatRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      ChatRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<ChatRecord>> queryChatRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      ChatRecord.collection,
-      ChatRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<ChatRecord>> queryChatRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      ChatRecord.collection,
-      ChatRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
 /// Functions to query GameRecords (as a Stream and as a Future).
 Future<int> queryGameRecordCount({
   Query Function(Query)? queryBuilder,
@@ -173,46 +134,6 @@ Future<List<GameRecord>> queryGameRecordOnce({
     queryCollectionOnce(
       GameRecord.collection,
       GameRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-/// Functions to query MessagesRecords (as a Stream and as a Future).
-Future<int> queryMessagesRecordCount({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      MessagesRecord.collection(parent),
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<MessagesRecord>> queryMessagesRecord({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      MessagesRecord.collection(parent),
-      MessagesRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<MessagesRecord>> queryMessagesRecordOnce({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      MessagesRecord.collection(parent),
-      MessagesRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
@@ -327,6 +248,46 @@ Future<List<UsersCartRecord>> queryUsersCartRecordOnce({
     queryCollectionOnce(
       UsersCartRecord.collection(parent),
       UsersCartRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query MessagesRecords (as a Stream and as a Future).
+Future<int> queryMessagesRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      MessagesRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<MessagesRecord>> queryMessagesRecord({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      MessagesRecord.collection(parent),
+      MessagesRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<MessagesRecord>> queryMessagesRecordOnce({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      MessagesRecord.collection(parent),
+      MessagesRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

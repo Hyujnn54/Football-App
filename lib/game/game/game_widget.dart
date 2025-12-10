@@ -1,9 +1,15 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/drawer/drawer_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/game/create_match/create_match_widget.dart';
+import '/game/match_details/match_details_widget.dart';
+import '/game/update_match/update_match_widget.dart';
+import '/index.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'game_model.dart';
@@ -60,8 +66,24 @@ class _GameWidgetState extends State<GameWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        drawer: Container(
+          width: 250.0,
+          child: Drawer(
+            elevation: 20.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                wrapWithModel(
+                  model: _model.drawerModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: DrawerWidget(),
+                ),
+              ],
+            ),
+          ),
+        ),
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).success,
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           leading: Builder(
             builder: (context) => FlutterFlowIconButton(
@@ -105,7 +127,7 @@ class _GameWidgetState extends State<GameWidget> {
                       fontStyle:
                           FlutterFlowTheme.of(context).headlineLarge.fontStyle,
                     ),
-                    color: FlutterFlowTheme.of(context).info,
+                    color: Colors.black,
                     letterSpacing: 0.0,
                     fontWeight: FontWeight.bold,
                     fontStyle:
@@ -134,7 +156,7 @@ class _GameWidgetState extends State<GameWidget> {
                       autofocus: false,
                       obscureText: false,
                       decoration: InputDecoration(
-                        hintText: 'Search matches or teams',
+                        hintText: 'Search',
                         hintStyle: FlutterFlowTheme.of(context)
                             .bodyMedium
                             .override(
@@ -219,47 +241,68 @@ class _GameWidgetState extends State<GameWidget> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
-                  child: FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
-                    },
-                    text: 'Create Match',
-                    icon: Icon(
-                      Icons.add_rounded,
-                      size: 20.0,
-                    ),
-                    options: FFButtonOptions(
-                      width: 200.0,
-                      height: 50.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 32.0, 0.0),
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      iconColor: FlutterFlowTheme.of(context).info,
-                      color: FlutterFlowTheme.of(context).success,
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleMedium.override(
-                                font: GoogleFonts.interTight(
+                Builder(
+                  builder: (context) => Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
+                    child: FFButtonWidget(
+                      onPressed: () async {
+                        await showDialog(
+                          context: context,
+                          builder: (dialogContext) {
+                            return Dialog(
+                              elevation: 0,
+                              insetPadding: EdgeInsets.zero,
+                              backgroundColor: Colors.transparent,
+                              alignment: AlignmentDirectional(0.0, 0.0)
+                                  .resolve(Directionality.of(context)),
+                              child: GestureDetector(
+                                onTap: () {
+                                  FocusScope.of(dialogContext).unfocus();
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                },
+                                child: CreateMatchWidget(),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      text: 'Create Match',
+                      icon: Icon(
+                        Icons.add_rounded,
+                        size: 20.0,
+                      ),
+                      options: FFButtonOptions(
+                        width: 200.0,
+                        height: 50.0,
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            32.0, 0.0, 32.0, 0.0),
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconColor: FlutterFlowTheme.of(context).info,
+                        color: FlutterFlowTheme.of(context).success,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleMedium.override(
+                                  font: GoogleFonts.interTight(
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .fontStyle,
+                                  ),
+                                  color: FlutterFlowTheme.of(context).info,
+                                  letterSpacing: 0.0,
                                   fontWeight: FontWeight.bold,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .titleMedium
                                       .fontStyle,
                                 ),
-                                color: FlutterFlowTheme.of(context).info,
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .titleMedium
-                                    .fontStyle,
-                              ),
-                      elevation: 3.0,
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                        width: 1.0,
+                        elevation: 3.0,
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(25.0),
                       ),
-                      borderRadius: BorderRadius.circular(25.0),
                     ),
                   ),
                 ),
@@ -318,98 +361,120 @@ class _GameWidgetState extends State<GameWidget> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  '📍 ',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodySmall
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodySmall
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodySmall
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        fontSize: 12.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodySmall
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodySmall
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                                Text(
-                                                  listViewGameRecord.location,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                            Text(
-                                              valueOrDefault<String>(
-                                                dateTimeFormat(
-                                                    "d/M h:mm a",
-                                                    listViewGameRecord
-                                                        .dateTime),
-                                                '5/12 5:40 PM',
-                                              ),
-                                              style:
+                                    StreamBuilder<TeamRecord>(
+                                      stream: TeamRecord.getDocument(
+                                          listViewGameRecord.team1Id!),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
                                                   FlutterFlowTheme.of(context)
+                                                      .primary,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+
+                                        final rowTeamRecord = snapshot.data!;
+
+                                        return Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Text(
+                                                      '📍 ',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodySmall
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodySmall
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodySmall
+                                                                      .fontStyle,
+                                                                ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                fontSize: 12.0,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodySmall
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodySmall
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                    Text(
+                                                      listViewGameRecord
+                                                          .location,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Text(
+                                                  dateTimeFormat(
+                                                      "d/M h:mm a",
+                                                      listViewGameRecord
+                                                          .dateTime!),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
                                                       .bodyMedium
                                                       .override(
                                                         font: GoogleFonts.inter(
@@ -431,159 +496,170 @@ class _GameWidgetState extends State<GameWidget> {
                                                                 .bodyMedium
                                                                 .fontStyle,
                                                       ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                        Container(
-                                          width: 8.0,
-                                          height: 8.0,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .success,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: StreamBuilder<TeamRecord>(
-                                            stream: TeamRecord.getDocument(
-                                                listViewGameRecord.team1Id!),
-                                            builder: (context, snapshot) {
-                                              // Customize what your widget looks like when it's loading.
-                                              if (!snapshot.hasData) {
-                                                return Center(
-                                                  child: SizedBox(
-                                                    width: 50.0,
-                                                    height: 50.0,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      valueColor:
-                                                          AlwaysStoppedAnimation<
-                                                              Color>(
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .primary,
+                                            if (listViewGameRecord.team2Id !=
+                                                null)
+                                              FlutterFlowIconButton(
+                                                borderRadius: 8.0,
+                                                buttonSize: 40.0,
+                                                icon: Icon(
+                                                  Icons.chat_bubble,
+                                                  color: Colors.black,
+                                                  size: 24.0,
+                                                ),
+                                                onPressed: () async {
+                                                  context.pushNamed(
+                                                    ChatWidget.routeName,
+                                                    queryParameters: {
+                                                      'gameref': serializeParam(
+                                                        listViewGameRecord
+                                                            .reference,
+                                                        ParamType
+                                                            .DocumentReference,
                                                       ),
-                                                    ),
+                                                    }.withoutNulls,
+                                                  );
+                                                },
+                                              ),
+                                            if (currentUserReference?.id ==
+                                                rowTeamRecord.creatorId?.id)
+                                              FlutterFlowIconButton(
+                                                borderRadius: 8.0,
+                                                buttonSize: 40.0,
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  color: Colors.black,
+                                                  size: 24.0,
+                                                ),
+                                                onPressed: () async {
+                                                  await listViewGameRecord
+                                                      .reference
+                                                      .delete();
+                                                },
+                                              ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                    Builder(
+                                      builder: (context) =>
+                                          StreamBuilder<TeamRecord>(
+                                        stream: TeamRecord.getDocument(
+                                            listViewGameRecord.team1Id!),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50.0,
+                                                height: 50.0,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
                                                   ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+
+                                          final rowTeamRecord = snapshot.data!;
+
+                                          return InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () async {
+                                              if (rowTeamRecord.creatorId?.id ==
+                                                  currentUserReference?.id) {
+                                                await showDialog(
+                                                  context: context,
+                                                  builder: (dialogContext) {
+                                                    return Dialog(
+                                                      elevation: 0,
+                                                      insetPadding:
+                                                          EdgeInsets.zero,
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                                  0.0, 0.0)
+                                                              .resolve(
+                                                                  Directionality.of(
+                                                                      context)),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          FocusScope.of(
+                                                                  dialogContext)
+                                                              .unfocus();
+                                                          FocusManager.instance
+                                                              .primaryFocus
+                                                              ?.unfocus();
+                                                        },
+                                                        child:
+                                                            UpdateMatchWidget(
+                                                          gameRecord:
+                                                              listViewGameRecord,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              } else {
+                                                await showDialog(
+                                                  context: context,
+                                                  builder: (dialogContext) {
+                                                    return Dialog(
+                                                      elevation: 0,
+                                                      insetPadding:
+                                                          EdgeInsets.zero,
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                                  0.0, 0.0)
+                                                              .resolve(
+                                                                  Directionality.of(
+                                                                      context)),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          FocusScope.of(
+                                                                  dialogContext)
+                                                              .unfocus();
+                                                          FocusManager.instance
+                                                              .primaryFocus
+                                                              ?.unfocus();
+                                                        },
+                                                        child:
+                                                            MatchDetailsWidget(
+                                                          match:
+                                                              listViewGameRecord,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
                                                 );
                                               }
-
-                                              final columnTeamRecord =
-                                                  snapshot.data!;
-
-                                              return Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    width: 40.0,
-                                                    height: 40.0,
-                                                    clipBehavior:
-                                                        Clip.antiAlias,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                    child: Image.network(
-                                                      '500x500?football',
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 8.0,
-                                                                0.0, 0.0),
-                                                    child: Text(
-                                                      columnTeamRecord.teamName,
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyMedium
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .inter(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                            ),
-                                                            fontSize: 14.0,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
                                             },
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 0.0, 16.0, 0.0),
-                                          child: Text(
-                                            'VS',
-                                            style: FlutterFlowTheme.of(context)
-                                                .headlineSmall
-                                                .override(
-                                                  font: GoogleFonts.interTight(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineSmall
-                                                            .fontStyle,
-                                                  ),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .success,
-                                                  fontSize: 18.0,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .headlineSmall
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              if (listViewGameRecord.team2Id !=
-                                                  null)
-                                                Container(
-                                                  decoration: BoxDecoration(),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
                                                   child:
                                                       StreamBuilder<TeamRecord>(
                                                     stream:
                                                         TeamRecord.getDocument(
                                                             listViewGameRecord
-                                                                .team2Id!),
+                                                                .team1Id!),
                                                     builder:
                                                         (context, snapshot) {
                                                       // Customize what your widget looks like when it's loading.
@@ -612,6 +688,9 @@ class _GameWidgetState extends State<GameWidget> {
                                                       return Column(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
                                                         children: [
                                                           Container(
                                                             width: 40.0,
@@ -625,7 +704,7 @@ class _GameWidgetState extends State<GameWidget> {
                                                             ),
                                                             child:
                                                                 Image.network(
-                                                              'https://images.unsplash.com/photo-1707248237023-80e6377b6e3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjQ5NTI4Mjh8&ixlib=rb-4.1.0&q=80&w=1080',
+                                                              '500x500?football',
                                                               fit: BoxFit.cover,
                                                             ),
                                                           ),
@@ -673,66 +752,250 @@ class _GameWidgetState extends State<GameWidget> {
                                                     },
                                                   ),
                                                 ),
-                                              if (listViewGameRecord.team2Id ==
-                                                  null)
-                                                FFButtonWidget(
-                                                  onPressed: () {
-                                                    print('Button pressed ...');
-                                                  },
-                                                  text: 'Join',
-                                                  options: FFButtonOptions(
-                                                    height: 40.0,
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(16.0, 0.0,
-                                                                16.0, 0.0),
-                                                    iconPadding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                0.0, 0.0),
-                                                    color: FlutterFlowTheme.of(
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          16.0, 0.0, 16.0, 0.0),
+                                                  child: Text(
+                                                    'VS',
+                                                    style: FlutterFlowTheme.of(
                                                             context)
-                                                        .primary,
-                                                    textStyle: FlutterFlowTheme
-                                                            .of(context)
-                                                        .titleSmall
+                                                        .headlineSmall
                                                         .override(
                                                           font: GoogleFonts
                                                               .interTight(
                                                             fontWeight:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .fontWeight,
+                                                                FontWeight.bold,
                                                             fontStyle:
                                                                 FlutterFlowTheme.of(
                                                                         context)
-                                                                    .titleSmall
+                                                                    .headlineSmall
                                                                     .fontStyle,
                                                           ),
-                                                          color: Colors.white,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .success,
+                                                          fontSize: 18.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .titleSmall
-                                                                  .fontWeight,
+                                                              FontWeight.bold,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
-                                                                  .titleSmall
+                                                                  .headlineSmall
                                                                   .fontStyle,
                                                         ),
-                                                    elevation: 0.0,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
                                                   ),
                                                 ),
-                                            ].divide(SizedBox(height: 2.0)),
-                                          ),
-                                        ),
-                                      ],
+                                                Expanded(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      if (listViewGameRecord
+                                                              .team2Id !=
+                                                          null)
+                                                        Container(
+                                                          decoration:
+                                                              BoxDecoration(),
+                                                          child: StreamBuilder<
+                                                              TeamRecord>(
+                                                            stream: TeamRecord
+                                                                .getDocument(
+                                                                    listViewGameRecord
+                                                                        .team2Id!),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              // Customize what your widget looks like when it's loading.
+                                                              if (!snapshot
+                                                                  .hasData) {
+                                                                return Center(
+                                                                  child:
+                                                                      SizedBox(
+                                                                    width: 50.0,
+                                                                    height:
+                                                                        50.0,
+                                                                    child:
+                                                                        CircularProgressIndicator(
+                                                                      valueColor:
+                                                                          AlwaysStoppedAnimation<
+                                                                              Color>(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .primary,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }
+
+                                                              final columnTeamRecord =
+                                                                  snapshot
+                                                                      .data!;
+
+                                                              return Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
+                                                                children: [
+                                                                  Container(
+                                                                    width: 40.0,
+                                                                    height:
+                                                                        40.0,
+                                                                    clipBehavior:
+                                                                        Clip.antiAlias,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                    ),
+                                                                    child: Image
+                                                                        .network(
+                                                                      'https://images.unsplash.com/photo-1707248237023-80e6377b6e3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjQ5NTI4Mjh8&ixlib=rb-4.1.0&q=80&w=1080',
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            8.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                    child: Text(
+                                                                      columnTeamRecord
+                                                                          .teamName,
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .override(
+                                                                            font:
+                                                                                GoogleFonts.inter(
+                                                                              fontWeight: FontWeight.w600,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                            ),
+                                                                            fontSize:
+                                                                                14.0,
+                                                                            letterSpacing:
+                                                                                0.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                      if (listViewGameRecord
+                                                              .team2Id ==
+                                                          null)
+                                                        FFButtonWidget(
+                                                          onPressed: () async {
+                                                            _model.team2Id =
+                                                                await queryTeamRecordOnce(
+                                                              queryBuilder:
+                                                                  (teamRecord) =>
+                                                                      teamRecord
+                                                                          .where(
+                                                                'creator_id',
+                                                                isEqualTo:
+                                                                    currentUserReference,
+                                                              ),
+                                                              singleRecord:
+                                                                  true,
+                                                            ).then((s) => s
+                                                                    .firstOrNull);
+                                                            if (_model.team2Id
+                                                                    ?.reference !=
+                                                                listViewGameRecord
+                                                                    .team1Id) {
+                                                              await listViewGameRecord
+                                                                  .reference
+                                                                  .update(
+                                                                      createGameRecordData(
+                                                                team2Id: _model
+                                                                    .team2Id
+                                                                    ?.reference,
+                                                              ));
+                                                            }
+
+                                                            safeSetState(() {});
+                                                          },
+                                                          text: 'Join',
+                                                          options:
+                                                              FFButtonOptions(
+                                                            width: 100.0,
+                                                            height: 40.0,
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        16.0,
+                                                                        0.0,
+                                                                        16.0,
+                                                                        0.0),
+                                                            iconPadding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        0.0,
+                                                                        0.0,
+                                                                        0.0,
+                                                                        0.0),
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .primary,
+                                                            textStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleSmall
+                                                                    .override(
+                                                                      font: GoogleFonts
+                                                                          .interTight(
+                                                                        fontWeight: FlutterFlowTheme.of(context)
+                                                                            .titleSmall
+                                                                            .fontWeight,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .titleSmall
+                                                                            .fontStyle,
+                                                                      ),
+                                                                      color: Colors
+                                                                          .white,
+                                                                      letterSpacing:
+                                                                          0.0,
+                                                                      fontWeight: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .titleSmall
+                                                                          .fontWeight,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .titleSmall
+                                                                          .fontStyle,
+                                                                    ),
+                                                            elevation: 0.0,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.0),
+                                                          ),
+                                                        ),
+                                                    ].divide(
+                                                        SizedBox(height: 2.0)),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ].divide(SizedBox(height: 12.0)),
                                 ),

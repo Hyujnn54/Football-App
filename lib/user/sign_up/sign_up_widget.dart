@@ -1073,7 +1073,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                   ));
 
                               context.goNamedAuth(
-                                  Shop1Widget.routeName, context.mounted);
+                                  GameWidget.routeName, context.mounted);
                             },
                             text: 'Create Account',
                             options: FFButtonOptions(

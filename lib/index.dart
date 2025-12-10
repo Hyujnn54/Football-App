@@ -12,4 +12,4 @@ export '/chat/chat/chat_widget.dart' show ChatWidget;
 export '/feedback/myfeedback/myfeedback_widget.dart' show MyfeedbackWidget;
 export '/feedback/response/response_widget.dart' show ResponseWidget;
 export '/game/game/game_widget.dart' show GameWidget;
-export '/profile/profile_widget.dart' show ProfileWidget;
+export '/user/profile/profile_widget.dart' show ProfileWidget;

@@ -98,6 +98,22 @@ class _MyfeedbackWidgetState extends State<MyfeedbackWidget> {
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            drawer: Container(
+              width: 250.0,
+              child: Drawer(
+                elevation: 20.0,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    wrapWithModel(
+                      model: _model.drawerModel,
+                      updateCallback: () => safeSetState(() {}),
+                      child: DrawerWidget(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             appBar: AppBar(
               backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
               automaticallyImplyLeading: false,
@@ -160,12 +176,12 @@ class _MyfeedbackWidgetState extends State<MyfeedbackWidget> {
                     borderRadius: 8.0,
                     buttonSize: 40.0,
                     icon: Icon(
-                      Icons.man_4,
+                      Icons.man,
                       color: Colors.black,
                       size: 24.0,
                     ),
-                    onPressed: () {
-                      print('IconButton pressed ...');
+                    onPressed: () async {
+                      context.pushNamed(FeedbackadminWidget.routeName);
                     },
                   ),
                 ),

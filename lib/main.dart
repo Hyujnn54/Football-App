@@ -8,7 +8,7 @@ import 'auth/firebase_auth/auth_util.dart';
 import 'backend/firebase/firebase_config.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
-import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'index.dart';
 
 void main() async {
@@ -126,7 +126,7 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPageName = 'shop1';
+  String _currentPageName = 'Game';
   late Widget? _currentPage;
 
   @override
@@ -140,94 +140,49 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'Game': GameWidget(),
-      'chat': ChatWidget(),
-      'shop1': Shop1Widget(),
       'Cart': CartWidget(),
+      'shop1': Shop1Widget(),
       'myfeedback': MyfeedbackWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
-    final MediaQueryData queryData = MediaQuery.of(context);
-
     return Scaffold(
       resizeToAvoidBottomInset: !widget.disableResizeToAvoidBottomInset,
-      body: MediaQuery(
-          data: queryData
-              .removeViewInsets(removeBottom: true)
-              .removeViewPadding(removeBottom: true),
-          child: _currentPage ?? tabs[_currentPageName]!),
-      extendBody: true,
-      bottomNavigationBar: FloatingNavbar(
-        currentIndex: currentIndex,
-        onTap: (i) => safeSetState(() {
+      body: _currentPage ?? tabs[_currentPageName],
+      bottomNavigationBar: GNav(
+        selectedIndex: currentIndex,
+        onTabChange: (i) => safeSetState(() {
           _currentPage = null;
           _currentPageName = tabs.keys.toList()[i];
         }),
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.black,
-        selectedBackgroundColor: Color(0x00000000),
-        borderRadius: 8.0,
-        itemBorderRadius: 8.0,
-        margin: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+        color: Colors.black,
+        activeColor: Colors.black,
+        tabBackgroundColor: Color(0x00000000),
+        tabBorderRadius: 100.0,
+        tabMargin: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-        width: double.infinity,
-        elevation: 0.0,
-        items: [
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.sports_volleyball,
-                  color: currentIndex == 0 ? Colors.black : Colors.black,
-                ),
-              ],
-            ),
+        gap: 0.0,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        duration: Duration(milliseconds: 500),
+        haptic: false,
+        tabs: [
+          GButton(
+            icon: Icons.sports_volleyball,
+            text: 'Game',
           ),
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.chat,
-                  color: currentIndex == 1 ? Colors.black : Colors.black,
-                ),
-              ],
-            ),
+          GButton(
+            icon: Icons.shopping_cart,
+            text: 'Cart',
           ),
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.shopping_basket,
-                  color: currentIndex == 2 ? Colors.black : Colors.black,
-                ),
-              ],
-            ),
+          GButton(
+            icon: Icons.shopping_basket,
+            text: 'Shop',
+            textStyle: TextStyle(),
           ),
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.shopping_cart,
-                  color: currentIndex == 3 ? Colors.black : Colors.black,
-                ),
-              ],
-            ),
-          ),
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.feedback_rounded,
-                  color: currentIndex == 4 ? Colors.black : Colors.black,
-                ),
-              ],
-            ),
+          GButton(
+            icon: Icons.feedback_rounded,
+            text: 'Feedback',
           )
         ],
       ),

@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/components/drawer/drawer_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
@@ -11,6 +12,8 @@ class Shop1Model extends FlutterFlowModel<Shop1Widget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
+  UsersCartRecord? existingCartItem;
   // Model for drawer component.
   late DrawerModel drawerModel;
 

@@ -1,4 +1,5 @@
 import '/backend/backend.dart';
+import '/components/drawer/drawer_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -66,8 +67,21 @@ class _FeedbackadminWidgetState extends State<FeedbackadminWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        drawer: Drawer(
-          elevation: 16.0,
+        drawer: Container(
+          width: 250.0,
+          child: Drawer(
+            elevation: 20.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                wrapWithModel(
+                  model: _model.drawerModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: DrawerWidget(),
+                ),
+              ],
+            ),
+          ),
         ),
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,

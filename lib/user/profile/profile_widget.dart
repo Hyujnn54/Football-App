@@ -1,4 +1,5 @@
 import '/backend/backend.dart';
+import '/components/drawer/drawer_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -56,20 +57,32 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        drawer: Drawer(
+          elevation: 16.0,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              wrapWithModel(
+                model: _model.drawerModel2,
+                updateCallback: () => safeSetState(() {}),
+                child: DrawerWidget(),
+              ),
+            ],
+          ),
+        ),
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           leading: FlutterFlowIconButton(
             borderRadius: 8.0,
             buttonSize: 40.0,
-            fillColor: FlutterFlowTheme.of(context).primary,
             icon: Icon(
-              Icons.arrow_back,
-              color: FlutterFlowTheme.of(context).info,
+              Icons.menu_rounded,
+              color: Colors.black,
               size: 24.0,
             ),
-            onPressed: () {
-              print('IconButton pressed ...');
+            onPressed: () async {
+              scaffoldKey.currentState!.openDrawer();
             },
           ),
           title: Text(
@@ -193,10 +206,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ],
                         ),
                         Text(
-                          valueOrDefault<String>(
-                            columnUserRecord?.displayName,
-                            'john',
-                          ),
+                          '',
                           style: FlutterFlowTheme.of(context)
                               .headlineMedium
                               .override(
@@ -214,10 +224,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               ),
                         ),
                         Text(
-                          valueOrDefault<String>(
-                            columnUserRecord?.fullName,
-                            'john_doe',
-                          ),
+                          '@john_anderson',
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(
@@ -974,6 +981,11 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                         ),
                       ].divide(SizedBox(height: 12.0)),
+                    ),
+                    wrapWithModel(
+                      model: _model.drawerModel1,
+                      updateCallback: () => safeSetState(() {}),
+                      child: DrawerWidget(),
                     ),
                   ]
                       .divide(SizedBox(height: 24.0))

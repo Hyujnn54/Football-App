@@ -15,33 +15,33 @@ class MessagesRecord extends FirestoreRecord {
     _initializeFields();
   }
 
-  // "message_id" field.
-  String? _messageId;
-  String get messageId => _messageId ?? '';
-  bool hasMessageId() => _messageId != null;
+  // "sender_ref" field.
+  DocumentReference? _senderRef;
+  DocumentReference? get senderRef => _senderRef;
+  bool hasSenderRef() => _senderRef != null;
 
-  // "sender_id" field.
-  String? _senderId;
-  String get senderId => _senderId ?? '';
-  bool hasSenderId() => _senderId != null;
-
-  // "content" field.
-  String? _content;
-  String get content => _content ?? '';
-  bool hasContent() => _content != null;
+  // "text" field.
+  String? _text;
+  String get text => _text ?? '';
+  bool hasText() => _text != null;
 
   // "timestamp" field.
   DateTime? _timestamp;
   DateTime? get timestamp => _timestamp;
   bool hasTimestamp() => _timestamp != null;
 
+  // "edited" field.
+  bool? _edited;
+  bool get edited => _edited ?? false;
+  bool hasEdited() => _edited != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
-    _messageId = snapshotData['message_id'] as String?;
-    _senderId = snapshotData['sender_id'] as String?;
-    _content = snapshotData['content'] as String?;
+    _senderRef = snapshotData['sender_ref'] as DocumentReference?;
+    _text = snapshotData['text'] as String?;
     _timestamp = snapshotData['timestamp'] as DateTime?;
+    _edited = snapshotData['edited'] as bool?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -84,17 +84,17 @@ class MessagesRecord extends FirestoreRecord {
 }
 
 Map<String, dynamic> createMessagesRecordData({
-  String? messageId,
-  String? senderId,
-  String? content,
+  DocumentReference? senderRef,
+  String? text,
   DateTime? timestamp,
+  bool? edited,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
-      'message_id': messageId,
-      'sender_id': senderId,
-      'content': content,
+      'sender_ref': senderRef,
+      'text': text,
       'timestamp': timestamp,
+      'edited': edited,
     }.withoutNulls,
   );
 
@@ -106,15 +106,15 @@ class MessagesRecordDocumentEquality implements Equality<MessagesRecord> {
 
   @override
   bool equals(MessagesRecord? e1, MessagesRecord? e2) {
-    return e1?.messageId == e2?.messageId &&
-        e1?.senderId == e2?.senderId &&
-        e1?.content == e2?.content &&
-        e1?.timestamp == e2?.timestamp;
+    return e1?.senderRef == e2?.senderRef &&
+        e1?.text == e2?.text &&
+        e1?.timestamp == e2?.timestamp &&
+        e1?.edited == e2?.edited;
   }
 
   @override
   int hash(MessagesRecord? e) => const ListEquality()
-      .hash([e?.messageId, e?.senderId, e?.content, e?.timestamp]);
+      .hash([e?.senderRef, e?.text, e?.timestamp, e?.edited]);
 
   @override
   bool isValidKey(Object? o) => o is MessagesRecord;
