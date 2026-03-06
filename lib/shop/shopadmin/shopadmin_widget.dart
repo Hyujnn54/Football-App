@@ -1,5 +1,5 @@
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
-import '/backend/firebase_storage/storage.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -10,6 +10,7 @@ import '/flutter_flow/upload_data.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'shopadmin_model.dart';
 export 'shopadmin_model.dart';
 
@@ -53,6 +54,9 @@ class _ShopadminWidgetState extends State<ShopadminWidget> {
 
     _model.textController3 ??= TextEditingController();
     _model.textFieldFocusNode3 ??= FocusNode();
+
+    _model.colorTextController ??= TextEditingController(text: 'color');
+    _model.colorFocusNode ??= FocusNode();
   }
 
   @override
@@ -64,6 +68,8 @@ class _ShopadminWidgetState extends State<ShopadminWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -359,16 +365,122 @@ class _ShopadminWidgetState extends State<ShopadminWidget> {
                           validator: _model.textController3Validator
                               .asValidator(context),
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(18.0),
-                          child: Image.network(
-                            'https://picsum.photos/seed/554/600',
-                            width: 285.3,
-                            height: 187.78,
-                            fit: BoxFit.cover,
+                        Container(
+                          width: 2000.0,
+                          child: TextFormField(
+                            controller: _model.colorTextController,
+                            focusNode: _model.colorFocusNode,
+                            autofocus: false,
+                            enabled: true,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              labelStyle: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .fontStyle,
+                                  ),
+                              hintText: 'TextField',
+                              hintStyle: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .fontStyle,
+                                  ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).error,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).error,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              filled: true,
+                              fillColor: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                            ),
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  font: GoogleFonts.inter(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                ),
+                            cursorColor:
+                                FlutterFlowTheme.of(context).primaryText,
+                            enableInteractiveSelection: true,
+                            validator: _model.colorTextControllerValidator
+                                .asValidator(context),
                           ),
                         ),
-                        FFButtonWidget(
+                        FlutterFlowIconButton(
+                          borderRadius: 8.0,
+                          buttonSize: 40.0,
+                          fillColor: FlutterFlowTheme.of(context).primary,
+                          icon: Icon(
+                            Icons.upload,
+                            color: FlutterFlowTheme.of(context).info,
+                            size: 24.0,
+                          ),
                           onPressed: () async {
                             final selectedMedia =
                                 await selectMediaWithSourceBottomSheet(
@@ -379,10 +491,9 @@ class _ShopadminWidgetState extends State<ShopadminWidget> {
                                 selectedMedia.every((m) => validateFileFormat(
                                     m.storagePath, context))) {
                               safeSetState(() =>
-                                  _model.isDataUploading_uploadDataBi8 = true);
+                                  _model.isDataUploading_uploadDataU7r = true);
                               var selectedUploadedFiles = <FFUploadedFile>[];
 
-                              var downloadUrls = <String>[];
                               try {
                                 selectedUploadedFiles = selectedMedia
                                     .map((m) => FFUploadedFile(
@@ -394,27 +505,14 @@ class _ShopadminWidgetState extends State<ShopadminWidget> {
                                           originalFilename: m.originalFilename,
                                         ))
                                     .toList();
-
-                                downloadUrls = (await Future.wait(
-                                  selectedMedia.map(
-                                    (m) async => await uploadData(
-                                        m.storagePath, m.bytes),
-                                  ),
-                                ))
-                                    .where((u) => u != null)
-                                    .map((u) => u!)
-                                    .toList();
                               } finally {
-                                _model.isDataUploading_uploadDataBi8 = false;
+                                _model.isDataUploading_uploadDataU7r = false;
                               }
                               if (selectedUploadedFiles.length ==
-                                      selectedMedia.length &&
-                                  downloadUrls.length == selectedMedia.length) {
+                                  selectedMedia.length) {
                                 safeSetState(() {
-                                  _model.uploadedLocalFile_uploadDataBi8 =
+                                  _model.uploadedLocalFile_uploadDataU7r =
                                       selectedUploadedFiles.first;
-                                  _model.uploadedFileUrl_uploadDataBi8 =
-                                      downloadUrls.first;
                                 });
                               } else {
                                 safeSetState(() {});
@@ -422,40 +520,45 @@ class _ShopadminWidgetState extends State<ShopadminWidget> {
                               }
                             }
                           },
-                          text: 'upload image',
-                          options: FFButtonOptions(
-                            height: 40.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                16.0, 0.0, 16.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: FlutterFlowTheme.of(context).accent2,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  font: GoogleFonts.interTight(
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
-                                  ),
-                                  color: Colors.black,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
-                                ),
-                            elevation: 0.0,
-                            borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.memory(
+                            _model.uploadedLocalFile_uploadDataU7r.bytes ??
+                                Uint8List.fromList([]),
+                            width: 200.0,
+                            height: 200.0,
+                            fit: BoxFit.cover,
                           ),
                         ),
                         FFButtonWidget(
                           onPressed: () async {
+                            _model.apiresult = await ImageCall.call(
+                              image: _model.uploadedLocalFile_uploadDataU7r,
+                              key: 'c8b8a5ac4104fc73d278a15e213c01cc',
+                            );
+
+                            if ((_model.apiresult?.succeeded ?? true)) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Done !',
+                                    style: TextStyle(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                                  ),
+                                  duration: Duration(milliseconds: 4000),
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).secondary,
+                                ),
+                              );
+                            }
+                            FFAppState().addToUploadedimage(ImageCall.imageurl(
+                              (_model.apiresult?.jsonBody ?? ''),
+                            ).toString());
+                            safeSetState(() {});
+
                             await ProduitRecord.collection
                                 .doc()
                                 .set(createProduitRecordData(
@@ -464,12 +567,20 @@ class _ShopadminWidgetState extends State<ShopadminWidget> {
                                       _model.textController2.text),
                                   description: _model.textController3.text,
                                   category: _model.dropDownValue,
+                                  image: FFAppState()
+                                      .uploadedimage
+                                      .take(1)
+                                      .toList()
+                                      .firstOrNull,
+                                  color: _model.colorTextController.text,
                                 ));
                             safeSetState(() {
                               _model.textController1?.clear();
                               _model.textController2?.clear();
                               _model.textController3?.clear();
                             });
+
+                            safeSetState(() {});
                           },
                           text: 'Add Product',
                           options: FFButtonOptions(
@@ -576,7 +687,7 @@ class _ShopadminWidgetState extends State<ShopadminWidget> {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(8.0),
                                       child: Image.network(
-                                        'https://images.unsplash.com/photo-1553890388-bf12f141dfbe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjQ5Mzc5MDJ8&ixlib=rb-4.1.0&q=80&w=1080',
+                                        listViewProduitRecord.image,
                                         width: 80.0,
                                         height: 80.0,
                                         fit: BoxFit.cover,
@@ -690,9 +801,43 @@ class _ShopadminWidgetState extends State<ShopadminWidget> {
                                               size: 20.0,
                                             ),
                                             onPressed: () async {
-                                              await listViewProduitRecord
-                                                  .reference
-                                                  .delete();
+                                              var confirmDialogResponse =
+                                                  await showDialog<bool>(
+                                                        context: context,
+                                                        builder:
+                                                            (alertDialogContext) {
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                                'Confirm Deletion'),
+                                                            content: Text(
+                                                                'Are you sure you want to remove this item? This cannot be undone.'),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () =>
+                                                                    Navigator.pop(
+                                                                        alertDialogContext,
+                                                                        false),
+                                                                child: Text(
+                                                                    'Cancel'),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () =>
+                                                                    Navigator.pop(
+                                                                        alertDialogContext,
+                                                                        true),
+                                                                child: Text(
+                                                                    'Confirm'),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      ) ??
+                                                      false;
+                                              if (confirmDialogResponse) {
+                                                await listViewProduitRecord
+                                                    .reference
+                                                    .delete();
+                                              }
                                             },
                                           ),
                                         ),

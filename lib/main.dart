@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -20,7 +21,13 @@ void main() async {
 
   await FlutterFlowTheme.initialize();
 
-  runApp(MyApp());
+  final appState = FFAppState(); // Initialize FFAppState
+  await appState.initializePersistedState();
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => appState,
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -139,10 +146,10 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'Game': GameWidget(),
-      'Cart': CartWidget(),
       'shop1': Shop1Widget(),
       'myfeedback': MyfeedbackWidget(),
+      'Game': GameWidget(),
+      'TeamListPage': TeamListPageWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -168,14 +175,6 @@ class _NavBarPageState extends State<NavBarPage> {
         haptic: false,
         tabs: [
           GButton(
-            icon: Icons.sports_volleyball,
-            text: 'Game',
-          ),
-          GButton(
-            icon: Icons.shopping_cart,
-            text: 'Cart',
-          ),
-          GButton(
             icon: Icons.shopping_basket,
             text: 'Shop',
             textStyle: TextStyle(),
@@ -183,6 +182,14 @@ class _NavBarPageState extends State<NavBarPage> {
           GButton(
             icon: Icons.feedback_rounded,
             text: 'Feedback',
+          ),
+          GButton(
+            icon: Icons.sports_volleyball,
+            text: 'Game',
+          ),
+          GButton(
+            icon: Icons.people_alt,
+            text: '',
           )
         ],
       ),

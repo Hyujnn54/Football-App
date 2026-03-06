@@ -95,7 +95,7 @@ class _ProductdialogueWidgetState extends State<ProductdialogueWidget> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12.0),
                       child: Image.network(
-                        'https://images.unsplash.com/photo-1620917669809-1af0497965de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjQ5NTc2Njd8&ixlib=rb-4.1.0&q=80&w=1080',
+                        columnProduitRecord.image,
                         width: double.infinity,
                         height: 200.0,
                         fit: BoxFit.cover,

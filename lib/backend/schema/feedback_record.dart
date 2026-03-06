@@ -55,6 +55,11 @@ class FeedbackRecord extends FirestoreRecord {
   String get status => _status ?? '';
   bool hasStatus() => _status != null;
 
+  // "sentiment" field.
+  String? _sentiment;
+  String get sentiment => _sentiment ?? '';
+  bool hasSentiment() => _sentiment != null;
+
   void _initializeFields() {
     _feedbackId = snapshotData['feedback_id'] as String?;
     _userId = snapshotData['user_id'] as String?;
@@ -64,6 +69,7 @@ class FeedbackRecord extends FirestoreRecord {
     _description = snapshotData['description'] as String?;
     _reponse = snapshotData['reponse'] as String?;
     _status = snapshotData['status'] as String?;
+    _sentiment = snapshotData['sentiment'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -109,6 +115,7 @@ Map<String, dynamic> createFeedbackRecordData({
   String? description,
   String? reponse,
   String? status,
+  String? sentiment,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -120,6 +127,7 @@ Map<String, dynamic> createFeedbackRecordData({
       'description': description,
       'reponse': reponse,
       'status': status,
+      'sentiment': sentiment,
     }.withoutNulls,
   );
 
@@ -138,7 +146,8 @@ class FeedbackRecordDocumentEquality implements Equality<FeedbackRecord> {
         e1?.subject == e2?.subject &&
         e1?.description == e2?.description &&
         e1?.reponse == e2?.reponse &&
-        e1?.status == e2?.status;
+        e1?.status == e2?.status &&
+        e1?.sentiment == e2?.sentiment;
   }
 
   @override
@@ -150,7 +159,8 @@ class FeedbackRecordDocumentEquality implements Equality<FeedbackRecord> {
         e?.subject,
         e?.description,
         e?.reponse,
-        e?.status
+        e?.status,
+        e?.sentiment
       ]);
 
   @override

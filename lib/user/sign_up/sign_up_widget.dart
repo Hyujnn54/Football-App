@@ -516,7 +516,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                           textInputAction: TextInputAction.next,
                                           obscureText: false,
                                           decoration: InputDecoration(
-                                            hintText: '+1 (555) 123-4567',
+                                            hintText: '+216 12 345 678',
                                             hintStyle:
                                                 FlutterFlowTheme.of(context)
                                                     .bodySmall
@@ -760,11 +760,12 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                                 FlutterFlowTheme.of(context)
                                                     .secondaryBackground,
                                             suffixIcon: InkWell(
-                                              onTap: () => safeSetState(
-                                                () => _model
+                                              onTap: () async {
+                                                safeSetState(() => _model
                                                         .passwordVisibility1 =
-                                                    !_model.passwordVisibility1,
-                                              ),
+                                                    !_model
+                                                        .passwordVisibility1);
+                                              },
                                               focusNode: FocusNode(
                                                   skipTraversal: true),
                                               child: Icon(
@@ -805,44 +806,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                           validator: _model
                                               .passwordTextControllerValidator
                                               .asValidator(context),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 4.0, 0.0, 0.0),
-                                          child: Text(
-                                            'Must be at least 8 characters with uppercase, lowercase, number and special character',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodySmall
-                                                .override(
-                                                  font: GoogleFonts.inter(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodySmall
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodySmall
-                                                            .fontStyle,
-                                                  ),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryText,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodySmall
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodySmall
-                                                          .fontStyle,
-                                                ),
-                                          ),
                                         ),
                                       ],
                                     ),
@@ -977,11 +940,12 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                                 FlutterFlowTheme.of(context)
                                                     .secondaryBackground,
                                             suffixIcon: InkWell(
-                                              onTap: () => safeSetState(
-                                                () => _model
+                                              onTap: () async {
+                                                safeSetState(() => _model
                                                         .passwordVisibility2 =
-                                                    !_model.passwordVisibility2,
-                                              ),
+                                                    !_model
+                                                        .passwordVisibility2);
+                                              },
                                               focusNode: FocusNode(
                                                   skipTraversal: true),
                                               child: Icon(
@@ -1070,6 +1034,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                     displayName: _model.textController1.text,
                                     createdTime: getCurrentTimestamp,
                                     role: 'user',
+                                    order: 1,
                                   ));
 
                               context.goNamedAuth(

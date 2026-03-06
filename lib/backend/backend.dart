@@ -9,9 +9,10 @@ import 'schema/produit_record.dart';
 import 'schema/user_record.dart';
 import 'schema/game_record.dart';
 import 'schema/feedback_record.dart';
-import 'schema/team_record.dart';
 import 'schema/users_cart_record.dart';
 import 'schema/messages_record.dart';
+import 'schema/orders_record.dart';
+import 'schema/team_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -24,9 +25,10 @@ export 'schema/produit_record.dart';
 export 'schema/user_record.dart';
 export 'schema/game_record.dart';
 export 'schema/feedback_record.dart';
-export 'schema/team_record.dart';
 export 'schema/users_cart_record.dart';
 export 'schema/messages_record.dart';
+export 'schema/orders_record.dart';
+export 'schema/team_record.dart';
 
 /// Functions to query ProduitRecords (as a Stream and as a Future).
 Future<int> queryProduitRecordCount({
@@ -176,43 +178,6 @@ Future<List<FeedbackRecord>> queryFeedbackRecordOnce({
       singleRecord: singleRecord,
     );
 
-/// Functions to query TeamRecords (as a Stream and as a Future).
-Future<int> queryTeamRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      TeamRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<TeamRecord>> queryTeamRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      TeamRecord.collection,
-      TeamRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<TeamRecord>> queryTeamRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      TeamRecord.collection,
-      TeamRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
 /// Functions to query UsersCartRecords (as a Stream and as a Future).
 Future<int> queryUsersCartRecordCount({
   DocumentReference? parent,
@@ -288,6 +253,80 @@ Future<List<MessagesRecord>> queryMessagesRecordOnce({
     queryCollectionOnce(
       MessagesRecord.collection(parent),
       MessagesRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query OrdersRecords (as a Stream and as a Future).
+Future<int> queryOrdersRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      OrdersRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<OrdersRecord>> queryOrdersRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      OrdersRecord.collection,
+      OrdersRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<OrdersRecord>> queryOrdersRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      OrdersRecord.collection,
+      OrdersRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query TeamRecords (as a Stream and as a Future).
+Future<int> queryTeamRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      TeamRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<TeamRecord>> queryTeamRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      TeamRecord.collection,
+      TeamRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<TeamRecord>> queryTeamRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      TeamRecord.collection,
+      TeamRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

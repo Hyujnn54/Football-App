@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -637,16 +638,42 @@ class _FeedbackcWidgetState extends State<FeedbackcWidget> {
                   ),
                   FFButtonWidget(
                     onPressed: () async {
-                      await FeedbackRecord.collection
-                          .doc()
+                      var feedbackRecordReference =
+                          FeedbackRecord.collection.doc();
+                      await feedbackRecordReference
                           .set(createFeedbackRecordData(
-                            email: _model.textController1.text,
-                            subject: _model.textController2.text,
-                            description: _model.textController3.text,
-                            dateSubmitted: getCurrentTimestamp,
-                          ));
+                        email: _model.textController1.text,
+                        subject: _model.textController2.text,
+                        description: _model.textController3.text,
+                        dateSubmitted: getCurrentTimestamp,
+                        status: 'En attente',
+                      ));
+                      _model.documentCreated =
+                          FeedbackRecord.getDocumentFromData(
+                              createFeedbackRecordData(
+                                email: _model.textController1.text,
+                                subject: _model.textController2.text,
+                                description: _model.textController3.text,
+                                dateSubmitted: getCurrentTimestamp,
+                                status: 'En attente',
+                              ),
+                              feedbackRecordReference);
+                      _model.sentimentAPIresults =
+                          await FeedbackSentimentClassificationCall.call(
+                        text: _model.textController3.text,
+                      );
+
+                      await _model.documentCreated!.reference
+                          .update(createFeedbackRecordData(
+                        sentiment: getJsonField(
+                          (_model.sentimentAPIresults?.jsonBody ?? ''),
+                          r'''$.sentiment''',
+                        ).toString(),
+                      ));
 
                       context.pushNamed(MyfeedbackWidget.routeName);
+
+                      safeSetState(() {});
                     },
                     text: 'Envoyer la demande',
                     options: FFButtonOptions(

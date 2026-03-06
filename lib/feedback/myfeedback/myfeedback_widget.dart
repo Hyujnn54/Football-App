@@ -191,138 +191,150 @@ class _MyfeedbackWidgetState extends State<MyfeedbackWidget> {
             ),
             body: SafeArea(
               top: true,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 8.0),
-                    child: FFButtonWidget(
-                      onPressed: () async {
-                        context.pushNamed(FeedbackcWidget.routeName);
-                      },
-                      text: 'Ajouter Feedback',
-                      options: FFButtonOptions(
-                        width: double.infinity,
-                        height: 48.0,
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            16.0, 0.0, 16.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: FlutterFlowTheme.of(context).accent1,
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  font: GoogleFonts.interTight(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 8.0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          context.pushNamed(FeedbackcWidget.routeName);
+                        },
+                        text: 'Ajouter Feedback',
+                        options: FFButtonOptions(
+                          width: double.infinity,
+                          height: 48.0,
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              16.0, 0.0, 16.0, 0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: FlutterFlowTheme.of(context).accent1,
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    font: GoogleFonts.interTight(
+                                      fontWeight: FontWeight.w600,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
+                                    ),
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .titleSmall
                                         .fontStyle,
                                   ),
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
-                                ),
-                        elevation: 0.0,
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).primary,
-                          width: 1.0,
+                          elevation: 0.0,
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).primary,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(16.0, 8.0, 16.0, 0.0),
-                    child: StreamBuilder<List<FeedbackRecord>>(
-                      stream: queryFeedbackRecord(),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  FlutterFlowTheme.of(context).primary,
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(16.0, 8.0, 16.0, 0.0),
+                      child: StreamBuilder<List<FeedbackRecord>>(
+                        stream: queryFeedbackRecord(),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50.0,
+                                height: 50.0,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    FlutterFlowTheme.of(context).primary,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        }
-                        List<FeedbackRecord> listViewFeedbackRecordList =
-                            snapshot.data!;
+                            );
+                          }
+                          List<FeedbackRecord> listViewFeedbackRecordList =
+                              snapshot.data!;
 
-                        return ListView.separated(
-                          padding: EdgeInsets.fromLTRB(
-                            0,
-                            0,
-                            0,
-                            100.0,
-                          ),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: listViewFeedbackRecordList.length,
-                          separatorBuilder: (_, __) => SizedBox(height: 12.0),
-                          itemBuilder: (context, listViewIndex) {
-                            final listViewFeedbackRecord =
-                                listViewFeedbackRecordList[listViewIndex];
-                            return Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 4.0,
-                                      color: Color(0x1A000000),
-                                      offset: Offset(
-                                        0.0,
-                                        2.0,
-                                      ),
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(16.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          8.0, 0.0, 8.0, 0.0),
-                                                  child: Text(
-                                                    listViewFeedbackRecord
-                                                        .subject,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .titleMedium
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .interTight(
+                          return ListView.separated(
+                            padding: EdgeInsets.fromLTRB(
+                              0,
+                              0,
+                              0,
+                              100.0,
+                            ),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: listViewFeedbackRecordList.length,
+                            separatorBuilder: (_, __) => SizedBox(height: 12.0),
+                            itemBuilder: (context, listViewIndex) {
+                              final listViewFeedbackRecord =
+                                  listViewFeedbackRecordList[listViewIndex];
+                              return Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 4.0,
+                                        color: Color(0x1A000000),
+                                        offset: Offset(
+                                          0.0,
+                                          2.0,
+                                        ),
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(8.0, 0.0,
+                                                                8.0, 0.0),
+                                                    child: Text(
+                                                      listViewFeedbackRecord
+                                                          .subject,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .titleMedium
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .interTight(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleMedium
+                                                                      .fontStyle,
+                                                            ),
+                                                            letterSpacing: 0.0,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontStyle:
@@ -331,238 +343,268 @@ class _MyfeedbackWidgetState extends State<MyfeedbackWidget> {
                                                                     .titleMedium
                                                                     .fontStyle,
                                                           ),
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .titleMedium
-                                                                  .fontStyle,
-                                                        ),
+                                                    ),
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          8.0, 4.0, 8.0, 0.0),
-                                                  child: Text(
-                                                    listViewFeedbackRecord
-                                                        .description,
-                                                    maxLines: 2,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font:
-                                                              GoogleFonts.inter(
-                                                            fontWeight:
-                                                                FlutterFlowTheme.of(
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(8.0, 4.0,
+                                                                8.0, 0.0),
+                                                    child: Text(
+                                                      listViewFeedbackRecord
+                                                          .description,
+                                                      maxLines: 2,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
                                                                     .fontWeight,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
+                                                                fontStyle: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
                                                                     .fontStyle,
-                                                          ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryText,
-                                                          letterSpacing: 0.0,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Builder(
+                                                  builder: (context) =>
+                                                      FlutterFlowIconButton(
+                                                    borderRadius: 8.0,
+                                                    buttonSize: 36.0,
+                                                    fillColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .accent1,
+                                                    icon: Icon(
+                                                      Icons.edit_outlined,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primary,
+                                                      size: 18.0,
+                                                    ),
+                                                    onPressed: () async {
+                                                      await showDialog(
+                                                        context: context,
+                                                        builder:
+                                                            (dialogContext) {
+                                                          return Dialog(
+                                                            elevation: 0,
+                                                            insetPadding:
+                                                                EdgeInsets.zero,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            alignment: AlignmentDirectional(
+                                                                    0.0, 0.0)
+                                                                .resolve(
+                                                                    Directionality.of(
+                                                                        context)),
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                FocusScope.of(
+                                                                        dialogContext)
+                                                                    .unfocus();
+                                                                FocusManager
+                                                                    .instance
+                                                                    .primaryFocus
+                                                                    ?.unfocus();
+                                                              },
+                                                              child:
+                                                                  UpdatedialogueforfeedbackWidget(
+                                                                feedbackRef:
+                                                                    listViewFeedbackRecord
+                                                                        .reference,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                                FlutterFlowIconButton(
+                                                  borderRadius: 8.0,
+                                                  buttonSize: 36.0,
+                                                  fillColor: Color(0xFFFFE6E6),
+                                                  icon: Icon(
+                                                    Icons.delete_outline,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .error,
+                                                    size: 18.0,
+                                                  ),
+                                                  onPressed: () async {
+                                                    var confirmDialogResponse =
+                                                        await showDialog<bool>(
+                                                              context: context,
+                                                              builder:
+                                                                  (alertDialogContext) {
+                                                                return AlertDialog(
+                                                                  title: Text(
+                                                                      'Confirm Deletion'),
+                                                                  content: Text(
+                                                                      'Are you sure you want to remove this item? This cannot be undone.'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: () => Navigator.pop(
+                                                                          alertDialogContext,
+                                                                          false),
+                                                                      child: Text(
+                                                                          'Cancel'),
+                                                                    ),
+                                                                    TextButton(
+                                                                      onPressed: () => Navigator.pop(
+                                                                          alertDialogContext,
+                                                                          true),
+                                                                      child: Text(
+                                                                          'Confirm'),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            ) ??
+                                                            false;
+                                                    if (confirmDialogResponse) {
+                                                      await listViewFeedbackRecord
+                                                          .reference
+                                                          .delete();
+                                                    }
+                                                  },
+                                                ),
+                                              ].divide(SizedBox(width: 8.0)),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Created on :',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodySmall
+                                                      .override(
+                                                        font: GoogleFonts.inter(
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
                                                                       context)
-                                                                  .bodyMedium
+                                                                  .bodySmall
                                                                   .fontWeight,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
-                                                                  .bodyMedium
+                                                                  .bodySmall
                                                                   .fontStyle,
                                                         ),
-                                                  ),
-                                                ),
-                                              ],
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                        fontSize: 12.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodySmall
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodySmall
+                                                                .fontStyle,
+                                                      ),
                                             ),
-                                          ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Builder(
-                                                builder: (context) =>
-                                                    FlutterFlowIconButton(
-                                                  borderRadius: 8.0,
-                                                  buttonSize: 36.0,
-                                                  fillColor:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .accent1,
-                                                  icon: Icon(
-                                                    Icons.edit_outlined,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primary,
-                                                    size: 18.0,
-                                                  ),
-                                                  onPressed: () async {
-                                                    await showDialog(
-                                                      context: context,
-                                                      builder: (dialogContext) {
-                                                        return Dialog(
-                                                          elevation: 0,
-                                                          insetPadding:
-                                                              EdgeInsets.zero,
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                          alignment: AlignmentDirectional(
-                                                                  0.0, 0.0)
-                                                              .resolve(
-                                                                  Directionality.of(
-                                                                      context)),
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () {
-                                                              FocusScope.of(
-                                                                      dialogContext)
-                                                                  .unfocus();
-                                                              FocusManager
-                                                                  .instance
-                                                                  .primaryFocus
-                                                                  ?.unfocus();
-                                                            },
-                                                            child:
-                                                                UpdatedialogueforfeedbackWidget(
-                                                              feedbackRef:
-                                                                  listViewFeedbackRecord
-                                                                      .reference,
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                ),
+                                            Text(
+                                              valueOrDefault<String>(
+                                                dateTimeFormat(
+                                                    "d/M h:mm a",
+                                                    listViewFeedbackRecord
+                                                        .dateSubmitted),
+                                                '5/12 4:38 PM',
                                               ),
-                                              FlutterFlowIconButton(
-                                                borderRadius: 8.0,
-                                                buttonSize: 36.0,
-                                                fillColor: Color(0xFFFFE6E6),
-                                                icon: Icon(
-                                                  Icons.delete_outline,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  size: 18.0,
-                                                ),
-                                                onPressed: () async {
-                                                  await listViewFeedbackRecord
-                                                      .reference
-                                                      .delete();
-                                                },
-                                              ),
-                                            ].divide(SizedBox(width: 8.0)),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Created on :',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodySmall
-                                                .override(
-                                                  font: GoogleFonts.inter(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodySmall
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodySmall
-                                                            .fontStyle,
-                                                  ),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryText,
-                                                  fontSize: 12.0,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodySmall
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodySmall
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                          Text(
-                                            valueOrDefault<String>(
-                                              dateTimeFormat(
-                                                  "d/M h:mm a",
-                                                  listViewFeedbackRecord
-                                                      .dateSubmitted),
-                                              '5/12 4:38 PM',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodySmall
+                                                      .override(
+                                                        font: GoogleFonts.inter(
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodySmall
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodySmall
+                                                                  .fontStyle,
+                                                        ),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                        fontSize: 12.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodySmall
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodySmall
+                                                                .fontStyle,
+                                                      ),
                                             ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodySmall
-                                                .override(
-                                                  font: GoogleFonts.inter(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodySmall
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodySmall
-                                                            .fontStyle,
-                                                  ),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryText,
-                                                  fontSize: 12.0,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodySmall
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodySmall
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ].divide(SizedBox(height: 8.0)),
+                                          ],
+                                        ),
+                                      ].divide(SizedBox(height: 8.0)),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        );
-                      },
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(1.0, 1.0),
-                    child: Container(),
-                  ),
-                ],
+                    Align(
+                      alignment: AlignmentDirectional(1.0, 1.0),
+                      child: Container(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

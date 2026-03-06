@@ -1,7 +1,10 @@
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'match_details_model.dart';
 export 'match_details_model.dart';
@@ -35,6 +38,38 @@ class _MatchDetailsWidgetState extends State<MatchDetailsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => MatchDetailsModel());
+
+    // On component load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.apiResult4ca = await OpenWeatherForecastCall.call();
+
+      if ((_model.apiResult4ca?.succeeded ?? true)) {
+        _model.weathertemp = getJsonField(
+          (_model.apiResult4ca?.jsonBody ?? ''),
+          r'''$.list[0].main.temp''',
+        );
+        _model.weatherDesc = getJsonField(
+          (_model.apiResult4ca?.jsonBody ?? ''),
+          r'''$.list[0].weather[0].description''',
+        ).toString();
+        _model.weatherIcon = getJsonField(
+          (_model.apiResult4ca?.jsonBody ?? ''),
+          r'''$.list[0].weather[0].icon''',
+        ).toString();
+        _model.weatherLoading = false;
+        _model.closestIndex = functions.closestForecastIndex(
+            OpenWeatherForecastCall.forecastDtList(
+              (_model.apiResult4ca?.jsonBody ?? ''),
+            )!
+                .toList(),
+            widget.match!.dateTime!);
+        safeSetState(() {});
+        _model.weathertemp = OpenWeatherForecastCall.tempList(
+          (_model.apiResult4ca?.jsonBody ?? ''),
+        )?.elementAtOrNull(_model.closestIndex!);
+        safeSetState(() {});
+      }
+    });
   }
 
   @override
@@ -112,7 +147,7 @@ class _MatchDetailsWidgetState extends State<MatchDetailsWidget> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(30.0),
                                   child: Image.network(
-                                    'https://images.unsplash.com/photo-1616778551732-6dd1289f567d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjUxOTA1MzJ8&ixlib=rb-4.1.0&q=80&w=1080',
+                                    columnTeamRecord.teamLogo,
                                     width: 60.0,
                                     height: 60.0,
                                     fit: BoxFit.cover,
@@ -286,7 +321,7 @@ class _MatchDetailsWidgetState extends State<MatchDetailsWidget> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(30.0),
                                   child: Image.network(
-                                    'https://images.unsplash.com/photo-1666149064783-efb6eac75a20?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjUxOTA1MzJ8&ixlib=rb-4.1.0&q=80&w=1080',
+                                    columnTeamRecord.teamLogo,
                                     width: 60.0,
                                     height: 60.0,
                                     fit: BoxFit.cover,
@@ -383,6 +418,45 @@ class _MatchDetailsWidgetState extends State<MatchDetailsWidget> {
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).alternate,
                   ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      FFIcons.kcloud,
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      size: 24.0,
+                    ),
+                    Text(
+                      valueOrDefault<String>(
+                        formatNumber(
+                          _model.weathertemp,
+                          formatType: FormatType.custom,
+                          format: '°C',
+                          locale: '',
+                        ),
+                        'Temp',
+                      ),
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            font: GoogleFonts.inter(
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                            letterSpacing: 0.0,
+                            fontWeight: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontWeight,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontStyle,
+                          ),
+                    ),
+                  ].divide(SizedBox(width: 8.0)),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.max,

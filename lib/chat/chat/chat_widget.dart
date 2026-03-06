@@ -1,6 +1,7 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
-import '/components/updatechat_widget.dart';
+import '/chat/updatechat/updatechat_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -85,16 +86,18 @@ class _ChatWidgetState extends State<ChatWidget> {
             children: [
               Stack(
                 children: [
-                  Container(
-                    width: 40.0,
-                    height: 40.0,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.network(
-                      'https://images.unsplash.com/photo-1741392076269-471898558663?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjQ5NDUwNDJ8&ixlib=rb-4.1.0&q=80&w=1080',
-                      fit: BoxFit.cover,
+                  AuthUserStreamWidget(
+                    builder: (context) => Container(
+                      width: 40.0,
+                      height: 40.0,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.network(
+                        currentUserPhoto,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Align(
@@ -127,7 +130,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                 .titleMedium
                                 .fontStyle,
                           ),
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 18.0,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.w600,
@@ -301,8 +304,39 @@ class _ChatWidgetState extends State<ChatWidget> {
                                       size: 24.0,
                                     ),
                                     onPressed: () async {
-                                      await listViewMessagesRecord.reference
-                                          .delete();
+                                      var confirmDialogResponse =
+                                          await showDialog<bool>(
+                                                context: context,
+                                                builder: (alertDialogContext) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                        'Confirm Deletion'),
+                                                    content: Text(
+                                                        'Are you sure you want to remove this item? This cannot be undone.'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                alertDialogContext,
+                                                                false),
+                                                        child: Text('Cancel'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                alertDialogContext,
+                                                                true),
+                                                        child: Text('Confirm'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ) ??
+                                              false;
+                                      if (confirmDialogResponse) {
+                                        await listViewMessagesRecord.reference
+                                            .delete();
+                                      }
                                     },
                                   ),
                                   Builder(
@@ -567,13 +601,43 @@ class _ChatWidgetState extends State<ChatWidget> {
                             size: 20.0,
                           ),
                           onPressed: () async {
-                            await MessagesRecord.createDoc(widget.gameref!)
-                                .set(createMessagesRecordData(
-                              senderRef: currentUserReference,
-                              text: _model.textController.text,
-                              timestamp: getCurrentTimestamp,
-                              edited: false,
-                            ));
+                            _model.apiResponse =
+                                await CheckProfanityGeminiCall.call(
+                              messageInput: _model.textController.text,
+                            );
+
+                            if (true) {
+                              await MessagesRecord.createDoc(widget.gameref!)
+                                  .set({
+                                ...createMessagesRecordData(
+                                  senderRef: currentUserReference,
+                                  text: _model.textController.text,
+                                  edited: false,
+                                ),
+                                ...mapToFirestore(
+                                  {
+                                    'timestamp': FieldValue.serverTimestamp(),
+                                  },
+                                ),
+                              });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Impossible d\'envoyer ce message car il contient des mots inappropriés.',
+                                    style: TextStyle(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                                  ),
+                                  duration: Duration(milliseconds: 4000),
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).secondary,
+                                ),
+                              );
+                            }
+
+                            safeSetState(() {});
                           },
                         ),
                       ].divide(SizedBox(width: 8.0)),

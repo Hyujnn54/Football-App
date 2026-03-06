@@ -404,6 +404,8 @@ class _CreateMatchWidgetState extends State<CreateMatchWidget> {
                     if ((_model.datePicked != null) &&
                         (_model.dropDownValue != null &&
                             _model.dropDownValue != '')) {
+                      context.safePop();
+
                       await GameRecord.collection
                           .doc()
                           .set(createGameRecordData(
@@ -411,7 +413,6 @@ class _CreateMatchWidgetState extends State<CreateMatchWidget> {
                             dateTime: _model.datePicked,
                             team1Id: _model.team1?.reference,
                           ));
-                      context.safePop();
                     }
 
                     safeSetState(() {});

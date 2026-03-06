@@ -17,18 +17,27 @@ class ProfileModel extends FlutterFlowModel<ProfileWidget> {
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode3;
   TextEditingController? textController3;
-  late bool passwordVisibility;
+  late bool passwordVisibility1;
   String? Function(BuildContext, String?)? textController3Validator;
+  // State field(s) for TextField widget.
+  FocusNode? textFieldFocusNode4;
+  TextEditingController? textController4;
+  late bool passwordVisibility2;
+  String? Function(BuildContext, String?)? textController4Validator;
+  // State field(s) for TextField widget.
+  FocusNode? textFieldFocusNode5;
+  TextEditingController? textController5;
+  late bool passwordVisibility3;
+  String? Function(BuildContext, String?)? textController5Validator;
   // Model for drawer component.
-  late DrawerModel drawerModel1;
-  // Model for drawer component.
-  late DrawerModel drawerModel2;
+  late DrawerModel drawerModel;
 
   @override
   void initState(BuildContext context) {
-    passwordVisibility = false;
-    drawerModel1 = createModel(context, () => DrawerModel());
-    drawerModel2 = createModel(context, () => DrawerModel());
+    passwordVisibility1 = false;
+    passwordVisibility2 = false;
+    passwordVisibility3 = false;
+    drawerModel = createModel(context, () => DrawerModel());
   }
 
   @override
@@ -42,7 +51,12 @@ class ProfileModel extends FlutterFlowModel<ProfileWidget> {
     textFieldFocusNode3?.dispose();
     textController3?.dispose();
 
-    drawerModel1.dispose();
-    drawerModel2.dispose();
+    textFieldFocusNode4?.dispose();
+    textController4?.dispose();
+
+    textFieldFocusNode5?.dispose();
+    textController5?.dispose();
+
+    drawerModel.dispose();
   }
 }

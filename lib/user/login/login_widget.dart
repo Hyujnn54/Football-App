@@ -392,10 +392,11 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         size: 20.0,
                                       ),
                                       suffixIcon: InkWell(
-                                        onTap: () => safeSetState(
-                                          () => _model.passwordVisibility =
-                                              !_model.passwordVisibility,
-                                        ),
+                                        onTap: () async {
+                                          safeSetState(() =>
+                                              _model.passwordVisibility =
+                                                  !_model.passwordVisibility);
+                                        },
                                         focusNode:
                                             FocusNode(skipTraversal: true),
                                         child: Icon(

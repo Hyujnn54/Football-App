@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '/backend/backend.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
@@ -88,8 +89,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: CartWidget.routeName,
           path: CartWidget.routePath,
-          builder: (context, params) =>
-              params.isEmpty ? NavBarPage(initialPage: 'Cart') : CartWidget(),
+          builder: (context, params) => CartWidget(),
         ),
         FFRoute(
           name: LoginWidget.routeName,
@@ -149,7 +149,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: ResponseWidget.routeName,
           path: ResponseWidget.routePath,
-          builder: (context, params) => ResponseWidget(),
+          builder: (context, params) => ResponseWidget(
+            responseFeedbackID: params.getParam(
+              'responseFeedbackID',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['feedback'],
+            ),
+            prompt: params.getParam(
+              'prompt',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: GameWidget.routeName,
@@ -161,6 +172,69 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: ProfileWidget.routeName,
           path: ProfileWidget.routePath,
           builder: (context, params) => ProfileWidget(),
+        ),
+        FFRoute(
+          name: CreateTeamWidget.routeName,
+          path: CreateTeamWidget.routePath,
+          builder: (context, params) => CreateTeamWidget(),
+        ),
+        FFRoute(
+          name: TeamDetailsWidget.routeName,
+          path: TeamDetailsWidget.routePath,
+          asyncParams: {
+            'teamDoc': getDoc(['Team'], TeamRecord.fromSnapshot),
+          },
+          builder: (context, params) => TeamDetailsWidget(
+            teamDoc: params.getParam(
+              'teamDoc',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: EditTeamWidget.routeName,
+          path: EditTeamWidget.routePath,
+          builder: (context, params) => EditTeamWidget(),
+        ),
+        FFRoute(
+          name: TeamsListWidget.routeName,
+          path: TeamsListWidget.routePath,
+          builder: (context, params) => TeamsListWidget(),
+        ),
+        FFRoute(
+          name: CreateTeamPageWidget.routeName,
+          path: CreateTeamPageWidget.routePath,
+          builder: (context, params) => CreateTeamPageWidget(),
+        ),
+        FFRoute(
+          name: TeamListPageWidget.routeName,
+          path: TeamListPageWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'TeamListPage')
+              : TeamListPageWidget(),
+        ),
+        FFRoute(
+          name: TeamDetailsPageWidget.routeName,
+          path: TeamDetailsPageWidget.routePath,
+          asyncParams: {
+            'teamParam': getDoc(['Team'], TeamRecord.fromSnapshot),
+          },
+          builder: (context, params) => TeamDetailsPageWidget(
+            teamParam: params.getParam(
+              'teamParam',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: SearchPlayerWebWidget.routeName,
+          path: SearchPlayerWebWidget.routePath,
+          builder: (context, params) => SearchPlayerWebWidget(),
+        ),
+        FFRoute(
+          name: FeedbackstatsWidget.routeName,
+          path: FeedbackstatsWidget.routePath,
+          builder: (context, params) => FeedbackstatsWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -280,6 +354,7 @@ class FFParameters {
     ParamType type, {
     bool isList = false,
     List<String>? collectionNamePath,
+    StructBuilder<T>? structBuilder,
   }) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -298,6 +373,7 @@ class FFParameters {
       type,
       isList,
       collectionNamePath: collectionNamePath,
+      structBuilder: structBuilder,
     );
   }
 }
@@ -362,6 +438,7 @@ class FFRoute {
           return transitionInfo.hasTransition
               ? CustomTransitionPage(
                   key: state.pageKey,
+                  name: state.name,
                   child: child,
                   transitionDuration: transitionInfo.duration,
                   transitionsBuilder:
@@ -379,7 +456,8 @@ class FFRoute {
                     child,
                   ),
                 )
-              : MaterialPage(key: state.pageKey, child: child);
+              : MaterialPage(
+                  key: state.pageKey, name: state.name, child: child);
         },
         routes: routes,
       );

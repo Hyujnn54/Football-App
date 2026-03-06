@@ -55,6 +55,11 @@ class UserRecord extends FirestoreRecord {
   String get role => _role ?? '';
   bool hasRole() => _role != null;
 
+  // "order" field.
+  int? _order;
+  int get order => _order ?? 0;
+  bool hasOrder() => _order != null;
+
   void _initializeFields() {
     _fullName = snapshotData['full_name'] as String?;
     _email = snapshotData['email'] as String?;
@@ -64,6 +69,7 @@ class UserRecord extends FirestoreRecord {
     _uid = snapshotData['uid'] as String?;
     _createdTime = snapshotData['created_time'] as DateTime?;
     _role = snapshotData['role'] as String?;
+    _order = castToType<int>(snapshotData['order']);
   }
 
   static CollectionReference get collection =>
@@ -108,6 +114,7 @@ Map<String, dynamic> createUserRecordData({
   String? uid,
   DateTime? createdTime,
   String? role,
+  int? order,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -119,6 +126,7 @@ Map<String, dynamic> createUserRecordData({
       'uid': uid,
       'created_time': createdTime,
       'role': role,
+      'order': order,
     }.withoutNulls,
   );
 
@@ -137,7 +145,8 @@ class UserRecordDocumentEquality implements Equality<UserRecord> {
         e1?.photoUrl == e2?.photoUrl &&
         e1?.uid == e2?.uid &&
         e1?.createdTime == e2?.createdTime &&
-        e1?.role == e2?.role;
+        e1?.role == e2?.role &&
+        e1?.order == e2?.order;
   }
 
   @override
@@ -149,7 +158,8 @@ class UserRecordDocumentEquality implements Equality<UserRecord> {
         e?.photoUrl,
         e?.uid,
         e?.createdTime,
-        e?.role
+        e?.role,
+        e?.order
       ]);
 
   @override

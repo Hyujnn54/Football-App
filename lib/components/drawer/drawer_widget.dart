@@ -32,8 +32,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => DrawerModel());
-
-    _model.switchValue = false;
   }
 
   @override
@@ -93,7 +91,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(40.0),
                           child: Image.network(
-                            'https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjQ5NDc3MjR8&ixlib=rb-4.1.0&q=80&w=1080',
+                            columnUserRecord.photoUrl,
                             width: 80.0,
                             height: 80.0,
                             fit: BoxFit.cover,
@@ -166,36 +164,37 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: 48.0,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          12.0, 12.0, 12.0, 12.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Icon(
-                            Icons.home_rounded,
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            size: 24.0,
-                          ),
-                          Text(
-                            'Home',
-                            style:
-                                FlutterFlowTheme.of(context).bodyLarge.override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .bodyLarge
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyLarge
-                                            .fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      context.pushNamed(GameWidget.routeName);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 48.0,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Icon(
+                              Icons.home_rounded,
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              size: 24.0,
+                            ),
+                            Text(
+                              'Home',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyLarge
+                                  .override(
+                                    font: GoogleFonts.inter(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodyLarge
                                           .fontWeight,
@@ -203,8 +202,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           .bodyLarge
                                           .fontStyle,
                                     ),
-                          ),
-                        ].divide(SizedBox(width: 12.0)),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyLarge
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyLarge
+                                        .fontStyle,
+                                  ),
+                            ),
+                          ].divide(SizedBox(width: 12.0)),
+                        ),
                       ),
                     ),
                   ),
@@ -297,21 +305,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           .bodyLarge
                                           .fontStyle,
                                     ),
-                          ),
-                          Switch.adaptive(
-                            value: _model.switchValue!,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.switchValue = newValue);
-                            },
-                            activeColor:
-                                FlutterFlowTheme.of(context).primaryText,
-                            activeTrackColor:
-                                FlutterFlowTheme.of(context).error,
-                            inactiveTrackColor:
-                                FlutterFlowTheme.of(context).alternate,
-                            inactiveThumbColor: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
                           ),
                         ].divide(SizedBox(width: 12.0)),
                       ),

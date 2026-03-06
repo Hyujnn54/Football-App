@@ -7,10 +7,13 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/game/create_match/create_match_widget.dart';
 import '/game/match_details/match_details_widget.dart';
+import '/game/stats/stats_widget.dart';
 import '/game/update_match/update_match_widget.dart';
 import '/index.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'game_model.dart';
 export 'game_model.dart';
@@ -45,7 +48,13 @@ class _GameWidgetState extends State<GameWidget> {
     super.initState();
     _model = createModel(context, () => GameModel());
 
-    _model.textController ??= TextEditingController();
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.seachLocation = null;
+      safeSetState(() {});
+    });
+
+    _model.textController ??= TextEditingController(text: _model.seachLocation);
     _model.textFieldFocusNode ??= FocusNode();
   }
 
@@ -153,6 +162,21 @@ class _GameWidgetState extends State<GameWidget> {
                     child: TextFormField(
                       controller: _model.textController,
                       focusNode: _model.textFieldFocusNode,
+                      onChanged: (_) => EasyDebounce.debounce(
+                        '_model.textController',
+                        Duration(milliseconds: 2000),
+                        () async {
+                          if (_model.textController.text == '') {
+                            _model.seachLocation = null;
+                            safeSetState(() {});
+                          } else {
+                            _model.seachLocation = _model.textController.text;
+                            safeSetState(() {});
+                          }
+
+                          safeSetState(() {});
+                        },
+                      ),
                       autofocus: false,
                       obscureText: false,
                       decoration: InputDecoration(
@@ -241,48 +265,53 @@ class _GameWidgetState extends State<GameWidget> {
                     ),
                   ),
                 ),
-                Builder(
-                  builder: (context) => Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
-                    child: FFButtonWidget(
-                      onPressed: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (dialogContext) {
-                            return Dialog(
-                              elevation: 0,
-                              insetPadding: EdgeInsets.zero,
-                              backgroundColor: Colors.transparent,
-                              alignment: AlignmentDirectional(0.0, 0.0)
-                                  .resolve(Directionality.of(context)),
-                              child: GestureDetector(
-                                onTap: () {
-                                  FocusScope.of(dialogContext).unfocus();
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                },
-                                child: CreateMatchWidget(),
-                              ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Builder(
+                      builder: (context) => Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            36.0, 16.0, 0.0, 16.0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (dialogContext) {
+                                return Dialog(
+                                  elevation: 0,
+                                  insetPadding: EdgeInsets.zero,
+                                  backgroundColor: Colors.transparent,
+                                  alignment: AlignmentDirectional(0.0, 0.0)
+                                      .resolve(Directionality.of(context)),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(dialogContext).unfocus();
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
+                                    child: CreateMatchWidget(),
+                                  ),
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                      text: 'Create Match',
-                      icon: Icon(
-                        Icons.add_rounded,
-                        size: 20.0,
-                      ),
-                      options: FFButtonOptions(
-                        width: 200.0,
-                        height: 50.0,
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            32.0, 0.0, 32.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconColor: FlutterFlowTheme.of(context).info,
-                        color: FlutterFlowTheme.of(context).success,
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleMedium.override(
+                          text: 'Create Match',
+                          icon: Icon(
+                            Icons.add_rounded,
+                            size: 20.0,
+                          ),
+                          options: FFButtonOptions(
+                            width: 200.0,
+                            height: 50.0,
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                36.0, 0.0, 32.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            iconColor: FlutterFlowTheme.of(context).info,
+                            color: FlutterFlowTheme.of(context).success,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .titleMedium
+                                .override(
                                   font: GoogleFonts.interTight(
                                     fontWeight: FontWeight.bold,
                                     fontStyle: FlutterFlowTheme.of(context)
@@ -296,21 +325,91 @@ class _GameWidgetState extends State<GameWidget> {
                                       .titleMedium
                                       .fontStyle,
                                 ),
-                        elevation: 3.0,
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
+                            elevation: 3.0,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(25.0),
                       ),
                     ),
-                  ),
+                    Builder(
+                      builder: (context) => Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            46.0, 0.0, 26.0, 0.0),
+                        child: StreamBuilder<List<GameRecord>>(
+                          stream: queryGameRecord(),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      FlutterFlowTheme.of(context).primary,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            List<GameRecord> iconButtonGameRecordList =
+                                snapshot.data!;
+
+                            return FlutterFlowIconButton(
+                              borderRadius: 8.0,
+                              buttonSize: 40.0,
+                              fillColor: Color(0xFF249689),
+                              icon: Icon(
+                                Icons.pie_chart,
+                                color: FlutterFlowTheme.of(context).info,
+                                size: 24.0,
+                              ),
+                              onPressed: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (dialogContext) {
+                                    return Dialog(
+                                      elevation: 0,
+                                      insetPadding: EdgeInsets.zero,
+                                      backgroundColor: Colors.transparent,
+                                      alignment: AlignmentDirectional(0.0, 0.0)
+                                          .resolve(Directionality.of(context)),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(dialogContext)
+                                              .unfocus();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        child: StatsWidget(
+                                          gamelist: iconButtonGameRecordList,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding:
                       EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 16.0),
                   child: StreamBuilder<List<GameRecord>>(
-                    stream: queryGameRecord(),
+                    stream: queryGameRecord(
+                      queryBuilder: (gameRecord) => gameRecord.where(
+                        'location',
+                        isEqualTo: _model.seachLocation,
+                      ),
+                    ),
                     builder: (context, snapshot) {
                       // Customize what your widget looks like when it's loading.
                       if (!snapshot.hasData) {
@@ -534,9 +633,43 @@ class _GameWidgetState extends State<GameWidget> {
                                                   size: 24.0,
                                                 ),
                                                 onPressed: () async {
-                                                  await listViewGameRecord
-                                                      .reference
-                                                      .delete();
+                                                  var confirmDialogResponse =
+                                                      await showDialog<bool>(
+                                                            context: context,
+                                                            builder:
+                                                                (alertDialogContext) {
+                                                              return AlertDialog(
+                                                                title: Text(
+                                                                    'Confirm Deletion'),
+                                                                content: Text(
+                                                                    'Are you sure you want to remove this item? This cannot be undone.'),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    onPressed: () =>
+                                                                        Navigator.pop(
+                                                                            alertDialogContext,
+                                                                            false),
+                                                                    child: Text(
+                                                                        'Cancel'),
+                                                                  ),
+                                                                  TextButton(
+                                                                    onPressed: () =>
+                                                                        Navigator.pop(
+                                                                            alertDialogContext,
+                                                                            true),
+                                                                    child: Text(
+                                                                        'Confirm'),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          ) ??
+                                                          false;
+                                                  if (confirmDialogResponse) {
+                                                    await listViewGameRecord
+                                                        .reference
+                                                        .delete();
+                                                  }
                                                 },
                                               ),
                                           ],
@@ -612,6 +745,49 @@ class _GameWidgetState extends State<GameWidget> {
                                                   },
                                                 );
                                               } else {
+                                                if (listViewGameRecord
+                                                        .team2Id !=
+                                                    null) {
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder: (dialogContext) {
+                                                      return Dialog(
+                                                        elevation: 0,
+                                                        insetPadding:
+                                                            EdgeInsets.zero,
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                    0.0, 0.0)
+                                                                .resolve(
+                                                                    Directionality.of(
+                                                                        context)),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            FocusScope.of(
+                                                                    dialogContext)
+                                                                .unfocus();
+                                                            FocusManager
+                                                                .instance
+                                                                .primaryFocus
+                                                                ?.unfocus();
+                                                          },
+                                                          child:
+                                                              MatchDetailsWidget(
+                                                            match:
+                                                                listViewGameRecord,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                }
+                                              }
+                                            },
+                                            onLongPress: () async {
+                                              if (listViewGameRecord.team2Id !=
+                                                  null) {
                                                 await showDialog(
                                                   context: context,
                                                   builder: (dialogContext) {
@@ -704,7 +880,8 @@ class _GameWidgetState extends State<GameWidget> {
                                                             ),
                                                             child:
                                                                 Image.network(
-                                                              '500x500?football',
+                                                              columnTeamRecord
+                                                                  .teamLogo,
                                                               fit: BoxFit.cover,
                                                             ),
                                                           ),
@@ -856,7 +1033,8 @@ class _GameWidgetState extends State<GameWidget> {
                                                                     ),
                                                                     child: Image
                                                                         .network(
-                                                                      'https://images.unsplash.com/photo-1707248237023-80e6377b6e3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjQ5NTI4Mjh8&ixlib=rb-4.1.0&q=80&w=1080',
+                                                                      columnTeamRecord
+                                                                          .teamLogo,
                                                                       fit: BoxFit
                                                                           .cover,
                                                                     ),
@@ -915,10 +1093,10 @@ class _GameWidgetState extends State<GameWidget> {
                                                                   true,
                                                             ).then((s) => s
                                                                     .firstOrNull);
-                                                            if (_model.team2Id
-                                                                    ?.reference !=
-                                                                listViewGameRecord
-                                                                    .team1Id) {
+                                                            if (listViewGameRecord
+                                                                    .team1Id !=
+                                                                _model.team2Id
+                                                                    ?.reference) {
                                                               await listViewGameRecord
                                                                   .reference
                                                                   .update(

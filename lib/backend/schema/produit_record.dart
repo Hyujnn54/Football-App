@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
-import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -31,22 +30,28 @@ class ProduitRecord extends FirestoreRecord {
   String get description => _description ?? '';
   bool hasDescription() => _description != null;
 
-  // "images" field.
-  List<String>? _images;
-  List<String> get images => _images ?? const [];
-  bool hasImages() => _images != null;
-
   // "category" field.
   String? _category;
   String get category => _category ?? '';
   bool hasCategory() => _category != null;
 
+  // "image" field.
+  String? _image;
+  String get image => _image ?? '';
+  bool hasImage() => _image != null;
+
+  // "color" field.
+  String? _color;
+  String get color => _color ?? '';
+  bool hasColor() => _color != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _price = castToType<double>(snapshotData['price']);
     _description = snapshotData['description'] as String?;
-    _images = getDataList(snapshotData['images']);
     _category = snapshotData['category'] as String?;
+    _image = snapshotData['image'] as String?;
+    _color = snapshotData['color'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -88,6 +93,8 @@ Map<String, dynamic> createProduitRecordData({
   double? price,
   String? description,
   String? category,
+  String? image,
+  String? color,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -95,6 +102,8 @@ Map<String, dynamic> createProduitRecordData({
       'price': price,
       'description': description,
       'category': category,
+      'image': image,
+      'color': color,
     }.withoutNulls,
   );
 
@@ -106,17 +115,17 @@ class ProduitRecordDocumentEquality implements Equality<ProduitRecord> {
 
   @override
   bool equals(ProduitRecord? e1, ProduitRecord? e2) {
-    const listEquality = ListEquality();
     return e1?.name == e2?.name &&
         e1?.price == e2?.price &&
         e1?.description == e2?.description &&
-        listEquality.equals(e1?.images, e2?.images) &&
-        e1?.category == e2?.category;
+        e1?.category == e2?.category &&
+        e1?.image == e2?.image &&
+        e1?.color == e2?.color;
   }
 
   @override
-  int hash(ProduitRecord? e) => const ListEquality()
-      .hash([e?.name, e?.price, e?.description, e?.images, e?.category]);
+  int hash(ProduitRecord? e) => const ListEquality().hash(
+      [e?.name, e?.price, e?.description, e?.category, e?.image, e?.color]);
 
   @override
   bool isValidKey(Object? o) => o is ProduitRecord;

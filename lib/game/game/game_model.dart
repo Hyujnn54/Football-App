@@ -6,6 +6,14 @@ import 'game_widget.dart' show GameWidget;
 import 'package:flutter/material.dart';
 
 class GameModel extends FlutterFlowModel<GameWidget> {
+  ///  Local state fields for this page.
+
+  String? seachLocation = '';
+
+  bool? sortNearest;
+
+  String? userlocation;
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for TextField widget.

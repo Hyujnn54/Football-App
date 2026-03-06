@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/index.dart';
@@ -11,6 +12,8 @@ class ResponseModel extends FlutterFlowModel<ResponseWidget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  // Stores action output result for [Backend Call - API (Feedback Response Generation)] action in IconButton widget.
+  ApiCallResponse? apiResultmce;
   // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;

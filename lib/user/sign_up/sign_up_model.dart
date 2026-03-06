@@ -28,6 +28,9 @@ class SignUpModel extends FlutterFlowModel<SignUpWidget> {
       return 'Enter your email is required';
     }
 
+    if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) {
+      return 'Has to be a valid email address.';
+    }
     return null;
   }
 
@@ -38,6 +41,13 @@ class SignUpModel extends FlutterFlowModel<SignUpWidget> {
   String? _textController2Validator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return '+1 (555) 123-4567 is required';
+    }
+
+    if (val.length < 8) {
+      return 'Requires at least 8 characters.';
+    }
+    if (val.length > 8) {
+      return 'Maximum 8 characters allowed, currently ${val.length}.';
     }
 
     return null;
@@ -53,6 +63,11 @@ class SignUpModel extends FlutterFlowModel<SignUpWidget> {
       return 'Create a strong password is required';
     }
 
+    if (!RegExp(
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}\$')
+        .hasMatch(val)) {
+      return 'Invalid text';
+    }
     return null;
   }
 

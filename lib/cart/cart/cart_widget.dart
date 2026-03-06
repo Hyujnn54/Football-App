@@ -1,9 +1,12 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
+import '/cart/order/order_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -88,393 +91,404 @@ class _CartWidgetState extends State<CartWidget> {
         ),
         body: SafeArea(
           top: true,
-          child: StreamBuilder<List<UsersCartRecord>>(
-            stream: queryUsersCartRecord(
-              parent: currentUserReference,
-              singleRecord: true,
-            ),
-            builder: (context, snapshot) {
-              // Customize what your widget looks like when it's loading.
-              if (!snapshot.hasData) {
-                return Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        FlutterFlowTheme.of(context).primary,
-                      ),
-                    ),
-                  ),
-                );
-              }
-              List<UsersCartRecord> columnUsersCartRecordList = snapshot.data!;
-              // Return an empty Container when the item does not exist.
-              if (snapshot.data!.isEmpty) {
-                return Container();
-              }
-              final columnUsersCartRecord = columnUsersCartRecordList.isNotEmpty
-                  ? columnUsersCartRecordList.first
-                  : null;
-
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                      child: Text(
-                        'Shopping Cart',
-                        style:
-                            FlutterFlowTheme.of(context).headlineLarge.override(
-                                  font: GoogleFonts.interTight(
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .headlineLarge
-                                        .fontStyle,
-                                  ),
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .headlineLarge
-                                      .fontStyle,
-                                ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                      child: StreamBuilder<List<UsersCartRecord>>(
-                        stream: queryUsersCartRecord(
-                          parent: currentUserReference,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                  child: Text(
+                    'Shopping Cart',
+                    style: FlutterFlowTheme.of(context).headlineLarge.override(
+                          font: GoogleFonts.interTight(
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .headlineLarge
+                                .fontStyle,
+                          ),
+                          letterSpacing: 0.0,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FlutterFlowTheme.of(context)
+                              .headlineLarge
+                              .fontStyle,
                         ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 50.0,
-                                height: 50.0,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    FlutterFlowTheme.of(context).primary,
-                                  ),
-                                ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                  child: StreamBuilder<List<UsersCartRecord>>(
+                    stream: queryUsersCartRecord(
+                      parent: currentUserReference,
+                    ),
+                    builder: (context, snapshot) {
+                      // Customize what your widget looks like when it's loading.
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: SizedBox(
+                            width: 50.0,
+                            height: 50.0,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                FlutterFlowTheme.of(context).primary,
                               ),
-                            );
-                          }
-                          List<UsersCartRecord> listViewUsersCartRecordList =
-                              snapshot.data!;
+                            ),
+                          ),
+                        );
+                      }
+                      List<UsersCartRecord> listViewUsersCartRecordList =
+                          snapshot.data!;
 
-                          return ListView.separated(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: listViewUsersCartRecordList.length,
-                            separatorBuilder: (_, __) => SizedBox(height: 12.0),
-                            itemBuilder: (context, listViewIndex) {
-                              final listViewUsersCartRecord =
-                                  listViewUsersCartRecordList[listViewIndex];
-                              return StreamBuilder<ProduitRecord>(
-                                stream: ProduitRecord.getDocument(
-                                    listViewUsersCartRecord.productRef!),
-                                builder: (context, snapshot) {
-                                  // Customize what your widget looks like when it's loading.
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                      child: SizedBox(
-                                        width: 50.0,
-                                        height: 50.0,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                          ),
+                      return ListView.separated(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: listViewUsersCartRecordList.length,
+                        separatorBuilder: (_, __) => SizedBox(height: 12.0),
+                        itemBuilder: (context, listViewIndex) {
+                          final listViewUsersCartRecord =
+                              listViewUsersCartRecordList[listViewIndex];
+                          return StreamBuilder<ProduitRecord>(
+                            stream: ProduitRecord.getDocument(
+                                listViewUsersCartRecord.productRef!),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        FlutterFlowTheme.of(context).primary,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              final containerProduitRecord = snapshot.data!;
+
+                              return Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 8.0,
+                                      color: Color(0x1A000000),
+                                      offset: Offset(
+                                        0.0,
+                                        2.0,
+                                      ),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(12.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: Image.network(
+                                          containerProduitRecord.image,
+                                          width: 80.0,
+                                          height: 80.0,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                    );
-                                  }
-
-                                  final containerProduitRecord = snapshot.data!;
-
-                                  return Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 8.0,
-                                          color: Color(0x1A000000),
-                                          offset: Offset(
-                                            0.0,
-                                            2.0,
-                                          ),
-                                        )
-                                      ],
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(12.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            child: Image.network(
-                                              'https://images.unsplash.com/photo-1612310595736-9e2a8c1d676a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjQ2MDcyODJ8&ixlib=rb-4.1.0&q=80&w=1080',
-                                              width: 80.0,
-                                              height: 80.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  containerProduitRecord.name,
-                                                  maxLines: 2,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .titleMedium
-                                                      .override(
-                                                        font: GoogleFonts
-                                                            .interTight(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .titleMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .titleMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                                Text(
-                                                  listViewUsersCartRecord
-                                                      .currentPrice
-                                                      .toString(),
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyLarge
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyLarge
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primary,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyLarge
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                                Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      height: 36.0,
-                                                      decoration: BoxDecoration(
-                                                        color: FlutterFlowTheme
-                                                                .of(context)
-                                                            .primaryBackground,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(18.0),
-                                                        border: Border.all(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .alternate,
-                                                          width: 1.0,
-                                                        ),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    8.0,
-                                                                    0.0,
-                                                                    8.0,
-                                                                    0.0),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            FlutterFlowIconButton(
-                                                              borderRadius:
-                                                                  14.0,
-                                                              buttonSize: 28.0,
-                                                              fillColor: Colors
-                                                                  .transparent,
-                                                              icon: Icon(
-                                                                Icons.remove,
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                                size: 16.0,
-                                                              ),
-                                                              onPressed:
-                                                                  () async {
-                                                                if (listViewUsersCartRecord
-                                                                            .quantity >
-                                                                        1
-                                                                    ? true
-                                                                    : false) {
-                                                                  await listViewUsersCartRecord
-                                                                      .reference
-                                                                      .update({
-                                                                    ...mapToFirestore(
-                                                                      {
-                                                                        'quantity':
-                                                                            FieldValue.increment(-(1)),
-                                                                      },
-                                                                    ),
-                                                                  });
-                                                                }
-                                                              },
-                                                            ),
-                                                            Text(
-                                                              listViewUsersCartRecord
-                                                                  .quantity
-                                                                  .toString(),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .inter(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .fontStyle,
-                                                                    ),
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                            ),
-                                                            FlutterFlowIconButton(
-                                                              borderRadius:
-                                                                  14.0,
-                                                              buttonSize: 28.0,
-                                                              fillColor: Colors
-                                                                  .transparent,
-                                                              icon: Icon(
-                                                                Icons.add,
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                                size: 16.0,
-                                                              ),
-                                                              onPressed:
-                                                                  () async {
-                                                                await listViewUsersCartRecord
-                                                                    .reference
-                                                                    .update({
-                                                                  ...mapToFirestore(
-                                                                    {
-                                                                      'quantity':
-                                                                          FieldValue.increment(
-                                                                              1),
-                                                                    },
-                                                                  ),
-                                                                });
-                                                              },
-                                                            ),
-                                                          ].divide(SizedBox(
-                                                              width: 12.0)),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    FlutterFlowIconButton(
-                                                      borderRadius: 18.0,
-                                                      buttonSize: 36.0,
-                                                      fillColor:
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              containerProduitRecord.name,
+                                              maxLines: 2,
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .titleMedium
+                                                  .override(
+                                                    font:
+                                                        GoogleFonts.interTight(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontStyle:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .error,
-                                                      icon: Icon(
-                                                        Icons.delete_outline,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .info,
-                                                        size: 18.0,
-                                                      ),
-                                                      onPressed: () async {
-                                                        await listViewUsersCartRecord
-                                                            .reference
-                                                            .delete();
-                                                      },
+                                                              .titleMedium
+                                                              .fontStyle,
                                                     ),
-                                                  ],
-                                                ),
-                                              ].divide(SizedBox(height: 8.0)),
+                                                    letterSpacing: 0.0,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleMedium
+                                                            .fontStyle,
+                                                  ),
                                             ),
-                                          ),
-                                        ].divide(SizedBox(width: 12.0)),
+                                            Text(
+                                              listViewUsersCartRecord
+                                                  .currentPrice
+                                                  .toString(),
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyLarge
+                                                  .override(
+                                                    font: GoogleFonts.inter(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyLarge
+                                                              .fontStyle,
+                                                    ),
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primary,
+                                                    letterSpacing: 0.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyLarge
+                                                            .fontStyle,
+                                                  ),
+                                            ),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  height: 36.0,
+                                                  decoration: BoxDecoration(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryBackground,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            18.0),
+                                                    border: Border.all(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .alternate,
+                                                      width: 1.0,
+                                                    ),
+                                                  ),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(8.0, 0.0,
+                                                                8.0, 0.0),
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        FlutterFlowIconButton(
+                                                          borderRadius: 14.0,
+                                                          buttonSize: 28.0,
+                                                          fillColor: Colors
+                                                              .transparent,
+                                                          icon: Icon(
+                                                            Icons.remove,
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .primaryText,
+                                                            size: 16.0,
+                                                          ),
+                                                          onPressed: () async {
+                                                            if (listViewUsersCartRecord
+                                                                        .quantity >
+                                                                    1
+                                                                ? true
+                                                                : false) {
+                                                              await listViewUsersCartRecord
+                                                                  .reference
+                                                                  .update({
+                                                                ...mapToFirestore(
+                                                                  {
+                                                                    'quantity':
+                                                                        FieldValue.increment(
+                                                                            -(1)),
+                                                                  },
+                                                                ),
+                                                              });
+                                                            }
+                                                          },
+                                                        ),
+                                                        Text(
+                                                          listViewUsersCartRecord
+                                                              .quantity
+                                                              .toString(),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
+                                                        ),
+                                                        FlutterFlowIconButton(
+                                                          borderRadius: 14.0,
+                                                          buttonSize: 28.0,
+                                                          fillColor: Colors
+                                                              .transparent,
+                                                          icon: Icon(
+                                                            Icons.add,
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .primaryText,
+                                                            size: 16.0,
+                                                          ),
+                                                          onPressed: () async {
+                                                            await listViewUsersCartRecord
+                                                                .reference
+                                                                .update({
+                                                              ...mapToFirestore(
+                                                                {
+                                                                  'quantity':
+                                                                      FieldValue
+                                                                          .increment(
+                                                                              1),
+                                                                },
+                                                              ),
+                                                            });
+                                                          },
+                                                        ),
+                                                      ].divide(SizedBox(
+                                                          width: 12.0)),
+                                                    ),
+                                                  ),
+                                                ),
+                                                FlutterFlowIconButton(
+                                                  borderRadius: 18.0,
+                                                  buttonSize: 36.0,
+                                                  fillColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .error,
+                                                  icon: Icon(
+                                                    Icons.delete_outline,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .info,
+                                                    size: 18.0,
+                                                  ),
+                                                  onPressed: () async {
+                                                    var confirmDialogResponse =
+                                                        await showDialog<bool>(
+                                                              context: context,
+                                                              builder:
+                                                                  (alertDialogContext) {
+                                                                return AlertDialog(
+                                                                  title: Text(
+                                                                      'Confirm Deletion'),
+                                                                  content: Text(
+                                                                      'Are you sure you want to remove this item? This cannot be undone.'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: () => Navigator.pop(
+                                                                          alertDialogContext,
+                                                                          false),
+                                                                      child: Text(
+                                                                          'Cancel'),
+                                                                    ),
+                                                                    TextButton(
+                                                                      onPressed: () => Navigator.pop(
+                                                                          alertDialogContext,
+                                                                          true),
+                                                                      child: Text(
+                                                                          'Delete'),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            ) ??
+                                                            false;
+                                                    if (confirmDialogResponse) {
+                                                      await listViewUsersCartRecord
+                                                          .reference
+                                                          .delete();
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ].divide(SizedBox(height: 8.0)),
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                    ].divide(SizedBox(width: 12.0)),
+                                  ),
+                                ),
                               );
                             },
                           );
                         },
-                      ),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: StreamBuilder<List<UsersCartRecord>>(
+                    stream: queryUsersCartRecord(
+                      parent: currentUserReference,
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Container(
+                    builder: (context, snapshot) {
+                      // Customize what your widget looks like when it's loading.
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: SizedBox(
+                            width: 50.0,
+                            height: 50.0,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                FlutterFlowTheme.of(context).primary,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                      List<UsersCartRecord> containerUsersCartRecordList =
+                          snapshot.data!;
+
+                      return Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color:
@@ -493,77 +507,82 @@ class _CartWidgetState extends State<CartWidget> {
                         ),
                         child: Padding(
                           padding: EdgeInsets.all(16.0),
-                          child: StreamBuilder<UsersCartRecord>(
-                            stream: UsersCartRecord.getDocument(
-                                columnUsersCartRecord!.reference),
-                            builder: (context, snapshot) {
-                              // Customize what your widget looks like when it's loading.
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: SizedBox(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        FlutterFlowTheme.of(context).primary,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'Order Summary',
+                                style: FlutterFlowTheme.of(context)
+                                    .titleLarge
+                                    .override(
+                                      font: GoogleFonts.interTight(
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleLarge
+                                            .fontStyle,
                                       ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleLarge
+                                          .fontStyle,
                                     ),
-                                  ),
-                                );
-                              }
-
-                              final columnUsersCartRecord = snapshot.data!;
-
-                              return Column(
+                              ),
+                              Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    'Order Summary',
-                                    style: FlutterFlowTheme.of(context)
-                                        .titleLarge
-                                        .override(
-                                          font: GoogleFonts.interTight(
-                                            fontWeight: FontWeight.bold,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleLarge
-                                                    .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.bold,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleLarge
-                                                  .fontStyle,
-                                        ),
+                                  Divider(
+                                    thickness: 1.0,
+                                    color:
+                                        FlutterFlowTheme.of(context).alternate,
                                   ),
-                                  Column(
+                                  Row(
                                     mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Divider(
-                                        thickness: 1.0,
-                                        color: FlutterFlowTheme.of(context)
-                                            .alternate,
+                                      Text(
+                                        'Total',
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleMedium
+                                            .override(
+                                              font: GoogleFonts.interTight(
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.bold,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleMedium
+                                                      .fontStyle,
+                                            ),
                                       ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Total',
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleMedium
-                                                .override(
-                                                  font: GoogleFonts.interTight(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .titleMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  letterSpacing: 0.0,
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          safeSetState(() {});
+                                        },
+                                        child: Text(
+                                          formatNumber(
+                                            functions.calculateCartTotal(
+                                                containerUsersCartRecordList
+                                                    .toList()),
+                                            formatType: FormatType.custom,
+                                            currency: '',
+                                            format: '',
+                                            locale: '',
+                                          ),
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleMedium
+                                              .override(
+                                                font: GoogleFonts.interTight(
                                                   fontWeight: FontWeight.bold,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
@@ -571,42 +590,111 @@ class _CartWidgetState extends State<CartWidget> {
                                                           .titleMedium
                                                           .fontStyle,
                                                 ),
-                                          ),
-                                          Text(
-                                            columnUsersCartRecord.currentPrice
-                                                .toString(),
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleMedium
-                                                .override(
-                                                  font: GoogleFonts.interTight(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .titleMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primary,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleMedium
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                        ],
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .fontStyle,
+                                              ),
+                                        ),
                                       ),
-                                    ].divide(SizedBox(height: 8.0)),
+                                    ],
                                   ),
                                   FFButtonWidget(
-                                    onPressed: () {
-                                      print('Button pressed ...');
+                                    onPressed: () async {
+                                      var confirmDialogResponse =
+                                          await showDialog<bool>(
+                                                context: context,
+                                                builder: (alertDialogContext) {
+                                                  return AlertDialog(
+                                                    title: Text('payment'),
+                                                    content: Text(
+                                                        'are you sure you want to pay'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                alertDialogContext,
+                                                                false),
+                                                        child: Text('Cancel'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                alertDialogContext,
+                                                                true),
+                                                        child: Text('Confirm'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ) ??
+                                              false;
+                                      if (confirmDialogResponse) {
+                                        _model.paymentResponse =
+                                            await SimulatePaymentCall.call(
+                                          userid: currentUserReference?.id,
+                                          orderDate:
+                                              _model.cartTotal?.toString(),
+                                          totalAmount: getCurrentTimestamp
+                                              .secondsSinceEpoch
+                                              .toDouble(),
+                                        );
+
+                                        if ((_model
+                                                .paymentResponse?.succeeded ??
+                                            true)) {
+                                          await OrdersRecord.collection
+                                              .doc()
+                                              .set(createOrdersRecordData(
+                                                userRef: currentUserReference,
+                                                orderDate: getCurrentTimestamp,
+                                                totalAmount: functions
+                                                    .calculateCartTotal(
+                                                        containerUsersCartRecordList
+                                                            .toList()),
+                                                orderNumber: valueOrDefault(
+                                                    currentUserDocument?.order,
+                                                    0),
+                                              ));
+
+                                          await currentUserReference!.update({
+                                            ...mapToFirestore(
+                                              {
+                                                'order':
+                                                    FieldValue.increment(1),
+                                              },
+                                            ),
+                                          });
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'payment failed try again',
+                                                style: TextStyle(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                ),
+                                              ),
+                                              duration:
+                                                  Duration(milliseconds: 4000),
+                                              backgroundColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondary,
+                                            ),
+                                          );
+                                        }
+                                      }
+
+                                      safeSetState(() {});
                                     },
-                                    text: 'Continue to Payment',
+                                    text: 'Pay Now',
                                     icon: Icon(
                                       Icons.payment,
                                       size: 20.0,
@@ -649,20 +737,89 @@ class _CartWidgetState extends State<CartWidget> {
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                   ),
-                                ].divide(SizedBox(height: 16.0)),
-                              );
-                            },
+                                ].divide(SizedBox(height: 8.0)),
+                              ),
+                              Builder(
+                                builder: (context) => FFButtonWidget(
+                                  onPressed: () async {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (dialogContext) {
+                                        return Dialog(
+                                          elevation: 0,
+                                          insetPadding: EdgeInsets.zero,
+                                          backgroundColor: Colors.transparent,
+                                          alignment: AlignmentDirectional(
+                                                  0.0, 0.0)
+                                              .resolve(
+                                                  Directionality.of(context)),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              FocusScope.of(dialogContext)
+                                                  .unfocus();
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
+                                            },
+                                            child: OrderWidget(),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  text: 'Purchase History',
+                                  icon: Icon(
+                                    Icons.history,
+                                    size: 20.0,
+                                  ),
+                                  options: FFButtonOptions(
+                                    width: double.infinity,
+                                    height: 50.0,
+                                    padding: EdgeInsets.all(8.0),
+                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    iconColor:
+                                        FlutterFlowTheme.of(context).info,
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    textStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .override(
+                                          font: GoogleFonts.interTight(
+                                            fontWeight: FontWeight.w600,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontStyle,
+                                          ),
+                                          color:
+                                              FlutterFlowTheme.of(context).info,
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.w600,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontStyle,
+                                        ),
+                                    elevation: 0.0,
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                ),
+                              ),
+                            ].divide(SizedBox(height: 16.0)),
                           ),
                         ),
-                      ),
-                    ),
-                  ]
-                      .divide(SizedBox(height: 16.0))
-                      .addToStart(SizedBox(height: 16.0))
-                      .addToEnd(SizedBox(height: 24.0)),
+                      );
+                    },
+                  ),
                 ),
-              );
-            },
+              ]
+                  .divide(SizedBox(height: 16.0))
+                  .addToStart(SizedBox(height: 16.0))
+                  .addToEnd(SizedBox(height: 24.0)),
+            ),
           ),
         ),
       ),
